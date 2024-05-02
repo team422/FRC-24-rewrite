@@ -13,6 +13,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
+import frc.lib.utils.TunableNumber;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -22,16 +28,50 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final Mode currentMode = Mode.REAL;
+  public static final boolean tuningMode = false;
 
-  public static enum Mode {
-    /** Running on a real robot. */
-    REAL,
+  public static final class ShooterConstants {
+    // Shooter pivot
+    public static final double kPivotGearRatio = 46.722;
+    // TODO: untuned values, fix later
+    public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(70);
+    public static final Rotation2d kMinAngle = Rotation2d.fromDegrees(30);
+    public static final Rotation2d kHomeAngle = Rotation2d.fromDegrees(45);
 
-    /** Running a physics simulator. */
-    SIM,
+    public static final TunableNumber kPivotP = new TunableNumber("Shooter Pivot P", 1.0);
+    public static final TunableNumber kPivotI = new TunableNumber("Shooter Pivot I", 0.0);
+    public static final TunableNumber kPivotD = new TunableNumber("Shooter Pivot D", 0.0);
+    public static final double kPivotVelocity = 5.0;
+    public static final double kPivotAcceleration = 10.0;
+    public static final ProfiledPIDController kPivotController =
+        new ProfiledPIDController(
+            kPivotP.get(),
+            kPivotI.get(),
+            kPivotD.get(),
+            new Constraints(kPivotVelocity, kPivotAcceleration));
 
-    /** Replaying from a log file. */
-    REPLAY
+    // Shooter flywheel
+    public static final double kFlywheelDiameter = Units.inchesToMeters(4.0);
+
+    public static final TunableNumber kFlywheelP = new TunableNumber("Shooter Flywheel P", 5.0);
+    public static final TunableNumber kFlywheelI = new TunableNumber("Shooter Flywheel I", 0.0);
+    public static final TunableNumber kFlywheelD = new TunableNumber("Shooter Flywheel D", 0.0);
+    public static final double kFlywheelVelocity = 5.0;
+    public static final double kFlywheelAcceleration = 10.0;
+    public static final ProfiledPIDController kFlywheelController =
+        new ProfiledPIDController(
+            kFlywheelP.get(),
+            kFlywheelI.get(),
+            kFlywheelD.get(),
+            new Constraints(kFlywheelVelocity, kFlywheelAcceleration));
+  }
+
+  public static final class Ports {
+    public static final int kShooterPivotLeader = 0;
+    public static final int kShooterPivotFollower = 0;
+    public static final int kShooterPivotEncoder = 0;
+
+    public static final int kFlywheelLeft = 0;
+    public static final int kFlywheelRight = 0;
   }
 }
