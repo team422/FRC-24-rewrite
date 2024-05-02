@@ -17,8 +17,8 @@ public class Shooter extends SubsystemBase {
   private ShooterPivotIO m_pivotIO;
   private FlywheelIO m_flywheelIO;
 
-  private ShooterPivotInputsAutoLogged m_pivotInputs;
-  private FlywheelInputsAutoLogged m_flywheelInputs;
+  public final ShooterPivotInputsAutoLogged m_pivotInputs;
+  public final FlywheelInputsAutoLogged m_flywheelInputs;
 
   private ProfiledPIDController m_pivotController;
   private ProfiledPIDController m_leftFlywheelController;
@@ -113,5 +113,9 @@ public class Shooter extends SubsystemBase {
   /** Set the flywheel velocity in meters per second */
   public Command setFlywheelVelocityCommand(double leftRPM, double rightRPM) {
     return Commands.runOnce(() -> setFlywheelVelocity(leftRPM, rightRPM));
+  }
+
+  public Rotation2d getPivotAngle() {
+    return Rotation2d.fromRadians(m_pivotInputs.curAngle);
   }
 }

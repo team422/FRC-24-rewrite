@@ -38,6 +38,8 @@ import frc.robot.subsystems.shooter.pivot.ShooterPivotIOSim;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private RobotState m_robotState;
+
   // Subsystems
   private Drive m_drive;
   private Shooter m_shooter;
@@ -86,6 +88,10 @@ public class RobotContainer {
               ShooterConstants.kPivotController,
               ShooterConstants.kFlywheelController);
     }
+
+    m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
+
+    m_robotState = RobotState.startInstance(m_drive, m_shooter);
   }
 
   private void configureControllers() {
@@ -106,7 +112,7 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   m_shooter.setFlywheelVelocity(2, 4);
-                  m_shooter.setPivotAngle(Rotation2d.fromDegrees(50));
+                  m_shooter.setPivotAngle(Rotation2d.fromDegrees(60));
                 }))
         .onFalse(
             Commands.runOnce(
@@ -114,5 +120,9 @@ public class RobotContainer {
                   m_shooter.setFlywheelVelocity(0.0, 0.0);
                   m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
                 }));
+  }
+
+  public void updateRobotState() {
+    m_robotState.updateRobotState();
   }
 }
