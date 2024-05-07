@@ -31,6 +31,7 @@ public final class Constants {
   public static final boolean tuningMode = false;
 
   public static final class ShooterConstants {
+
     // Shooter pivot
     public static final double kPivotGearRatio = 46.722;
     // TODO: untuned values, fix later
