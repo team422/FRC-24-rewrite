@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.shooter.Shooter;
 
 public class RobotState {
@@ -15,12 +16,13 @@ public class RobotState {
   // subsystems
   private Drive m_drive;
   private Shooter m_shooter;
+  private Indexer m_indexer;
 
   // mechanism
   private final boolean kMechanismEnabled = true;
   MechanismLigament2d m_shooterPivotMech;
 
-  private RobotState(Drive drive, Shooter shooter) {
+  private RobotState(Drive drive, Shooter shooter, Indexer indexer) {
     // subsystems
     m_drive = drive;
     m_shooter = shooter;
@@ -41,9 +43,9 @@ public class RobotState {
     SmartDashboard.putData("Mech2d", m_mechanism);
   }
 
-  public static RobotState startInstance(Drive drive, Shooter shooter) {
+  public static RobotState startInstance(Drive drive, Shooter shooter, Indexer indexer) {
     if (instance == null) {
-      instance = new RobotState(drive, shooter);
+      instance = new RobotState(drive, shooter, indexer);
     } else {
       throw new IllegalStateException("RobotState instance already started");
     }

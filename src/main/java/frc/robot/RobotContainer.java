@@ -25,6 +25,9 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.indexer.IndexerIOFalcon;
+import frc.robot.subsystems.indexer.IndexerIOSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOKraken;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOSim;
@@ -43,6 +46,7 @@ public class RobotContainer {
   // Subsystems
   private Drive m_drive;
   private Shooter m_shooter;
+  private Indexer m_indexer;
 
   // Controllers
   private DriverControls m_driverControls;
@@ -73,6 +77,11 @@ public class RobotContainer {
               new FlywheelIOKraken(Ports.kFlywheelLeft, Ports.kFlywheelRight),
               ShooterConstants.kPivotController,
               ShooterConstants.kFlywheelController);
+      m_indexer =
+          new Indexer(
+            new IndexerIOFalcon(Ports.kIndexerMotor,
+                                Ports.kIndexerBeamBreakOne,
+                                Ports.kIndexerBeamBreakTwo));
     } else {
       m_drive =
           new Drive(
@@ -87,11 +96,12 @@ public class RobotContainer {
               new FlywheelIOSim(),
               ShooterConstants.kPivotController,
               ShooterConstants.kFlywheelController);
+      m_indexer = new Indexer(new IndexerIOSim());
     }
 
     m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
 
-    m_robotState = RobotState.startInstance(m_drive, m_shooter);
+    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer);
   }
 
   private void configureControllers() {
@@ -120,6 +130,12 @@ public class RobotContainer {
                   m_shooter.setFlywheelVelocity(0.0, 0.0);
                   m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
                 }));
+    
+    m_driverControls.testIndexer().onTrue(
+      m_indexer.runIndexer(6.0)
+    ).onFalse(
+      m_indexer.runIndexer(0.0)
+    );
   }
 
   public void updateRobotState() {

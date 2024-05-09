@@ -74,5 +74,9 @@ public final class Constants {
 
     public static final int kFlywheelLeft = 0;
     public static final int kFlywheelRight = 0;
+
+    public static final int kIndexerMotor = 0;
+    public static final int kIndexerBeamBreakOne = 0;
+    public static final int kIndexerBeamBreakTwo = 0;
   }
 }

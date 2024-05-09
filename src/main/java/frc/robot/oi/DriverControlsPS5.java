@@ -29,4 +29,9 @@ public class DriverControlsPS5 implements DriverControls {
   public Trigger testShooter() {
     return m_controller.L2();
   }
+
+  @Override
+  public Trigger testIndexer() {
+    return m_controller.R2();
+  }
 }

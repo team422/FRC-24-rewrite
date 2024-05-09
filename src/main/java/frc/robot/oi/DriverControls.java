@@ -10,4 +10,6 @@ public interface DriverControls {
   public double getDriveRotation();
 
   public Trigger testShooter();
+
+  public Trigger testIndexer();
 }
