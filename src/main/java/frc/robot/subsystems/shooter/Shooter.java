@@ -6,6 +6,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.utils.LoggedTunableNumber;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIO;
 import frc.robot.subsystems.shooter.flywheel.FlywheelInputsAutoLogged;
@@ -14,6 +15,21 @@ import frc.robot.subsystems.shooter.pivot.ShooterPivotInputsAutoLogged;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
+  /**
+   * Represents the desired state of the shooter, including flywheel and pivot measurements
+   */
+  public static class ShooterPosition {
+    public Rotation2d pivotAngle;
+    public double leftFlywheelVelocity;
+    public double rightFlywheelVelocity;
+
+    public ShooterPosition(Rotation2d pivotAngle, double leftFlywheelVelocity, double rightFlywheelVelocity) {
+      this.pivotAngle = pivotAngle;
+      this.leftFlywheelVelocity = leftFlywheelVelocity;
+      this.rightFlywheelVelocity = rightFlywheelVelocity;
+    }
+  }
+
   private ShooterPivotIO m_pivotIO;
   private FlywheelIO m_flywheelIO;
 
@@ -43,23 +59,21 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (ShooterConstants.kPivotP.hasChanged()
-        || ShooterConstants.kPivotI.hasChanged()
-        || ShooterConstants.kPivotD.hasChanged()) {
+    // update pid if changed
+    LoggedTunableNumber.ifChanged(hashCode(), () -> {
       m_pivotController.setP(ShooterConstants.kPivotP.get());
       m_pivotController.setI(ShooterConstants.kPivotI.get());
       m_pivotController.setD(ShooterConstants.kPivotD.get());
-    }
-    if (ShooterConstants.kFlywheelP.hasChanged()
-        || ShooterConstants.kFlywheelI.hasChanged()
-        || ShooterConstants.kFlywheelD.hasChanged()) {
+    }, ShooterConstants.kPivotP, ShooterConstants.kPivotI, ShooterConstants.kPivotD);
+
+    LoggedTunableNumber.ifChanged(hashCode(), () -> {
       m_leftFlywheelController.setP(ShooterConstants.kFlywheelP.get());
       m_leftFlywheelController.setI(ShooterConstants.kFlywheelI.get());
       m_leftFlywheelController.setD(ShooterConstants.kFlywheelD.get());
       m_rightFlywheelController.setP(ShooterConstants.kFlywheelP.get());
       m_rightFlywheelController.setI(ShooterConstants.kFlywheelI.get());
       m_rightFlywheelController.setD(ShooterConstants.kFlywheelD.get());
-    }
+    }, ShooterConstants.kFlywheelP, ShooterConstants.kFlywheelI, ShooterConstants.kFlywheelD);
 
     m_pivotIO.updateInputs(m_pivotInputs);
     m_flywheelIO.updateInputs(m_flywheelInputs);
@@ -113,6 +127,15 @@ public class Shooter extends SubsystemBase {
   /** Set the flywheel velocity in meters per second */
   public Command setFlywheelVelocityCommand(double leftRPM, double rightRPM) {
     return Commands.runOnce(() -> setFlywheelVelocity(leftRPM, rightRPM));
+  }
+
+  public void setShooter(ShooterPosition state) {
+    setPivotAngle(state.pivotAngle);
+    setFlywheelVelocity(state.leftFlywheelVelocity, state.rightFlywheelVelocity);
+  }
+
+  public Command setShooterCommand(ShooterPosition state) {
+    return Commands.runOnce(() -> setShooter(state));
   }
 
   public Rotation2d getPivotAngle() {

@@ -17,7 +17,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
-import frc.lib.utils.TunableNumber;
+import frc.lib.utils.LoggedTunableNumber;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -39,9 +39,9 @@ public final class Constants {
     public static final Rotation2d kMinAngle = Rotation2d.fromDegrees(30);
     public static final Rotation2d kHomeAngle = Rotation2d.fromDegrees(45);
 
-    public static final TunableNumber kPivotP = new TunableNumber("Shooter Pivot P", 1.0);
-    public static final TunableNumber kPivotI = new TunableNumber("Shooter Pivot I", 0.0);
-    public static final TunableNumber kPivotD = new TunableNumber("Shooter Pivot D", 0.0);
+    public static final LoggedTunableNumber kPivotP = new LoggedTunableNumber("Shooter Pivot P", 1.0);
+    public static final LoggedTunableNumber kPivotI = new LoggedTunableNumber("Shooter Pivot I", 0.0);
+    public static final LoggedTunableNumber kPivotD = new LoggedTunableNumber("Shooter Pivot D", 0.0);
     public static final double kPivotVelocity = 5.0;
     public static final double kPivotAcceleration = 10.0;
     public static final ProfiledPIDController kPivotController =
@@ -54,9 +54,9 @@ public final class Constants {
     // Shooter flywheel
     public static final double kFlywheelDiameter = Units.inchesToMeters(4.0);
 
-    public static final TunableNumber kFlywheelP = new TunableNumber("Shooter Flywheel P", 5.0);
-    public static final TunableNumber kFlywheelI = new TunableNumber("Shooter Flywheel I", 0.0);
-    public static final TunableNumber kFlywheelD = new TunableNumber("Shooter Flywheel D", 0.0);
+    public static final LoggedTunableNumber kFlywheelP = new LoggedTunableNumber("Shooter Flywheel P", 5.0);
+    public static final LoggedTunableNumber kFlywheelI = new LoggedTunableNumber("Shooter Flywheel I", 0.0);
+    public static final LoggedTunableNumber kFlywheelD = new LoggedTunableNumber("Shooter Flywheel D", 0.0);
     public static final double kFlywheelVelocity = 5.0;
     public static final double kFlywheelAcceleration = 10.0;
     public static final ProfiledPIDController kFlywheelController =
