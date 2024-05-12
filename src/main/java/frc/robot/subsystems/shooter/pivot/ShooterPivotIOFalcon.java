@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.Constants.ShooterConstants;
 
 public class ShooterPivotIOFalcon implements ShooterPivotIO {
   private TalonFX m_leader;
@@ -34,6 +35,8 @@ public class ShooterPivotIOFalcon implements ShooterPivotIO {
     m_followerVoltageSignal = m_follower.getMotorVoltage();
     m_followerCurrentSignal = m_follower.getSupplyCurrent();
     m_followerVelocitySignal = m_follower.getVelocity();
+
+    m_absoluteEncoder.setPositionOffset(ShooterConstants.kPivotOffset.getRotations());
   }
 
   @Override

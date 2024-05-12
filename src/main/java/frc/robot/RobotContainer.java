@@ -20,7 +20,7 @@ import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.oi.DriverControls;
-import frc.robot.oi.DriverControlsXbox;
+import frc.robot.oi.DriverControlsPS5;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOSim;
@@ -75,12 +75,12 @@ public class RobotContainer {
                   Ports.kShooterPivotEncoder),
               new FlywheelIOKraken(Ports.kFlywheelLeft, Ports.kFlywheelRight),
               ShooterConstants.kPivotController,
-              ShooterConstants.kFlywheelController);
+              ShooterConstants.kLeftFlywheelController,
+              ShooterConstants.kRightFlywheelController);
       m_indexer =
           new Indexer(
-            new IndexerIOFalcon(Ports.kIndexerMotor,
-                                Ports.kIndexerBeamBreakOne,
-                                Ports.kIndexerBeamBreakTwo));
+              new IndexerIOFalcon(
+                  Ports.kKicker, Ports.kIndexerBeamBreakOne, Ports.kIndexerBeamBreakTwo));
     } else {
       m_drive =
           new Drive(
@@ -94,7 +94,8 @@ public class RobotContainer {
               new ShooterPivotIOSim(),
               new FlywheelIOSim(),
               ShooterConstants.kPivotController,
-              ShooterConstants.kFlywheelController);
+              ShooterConstants.kLeftFlywheelController,
+              ShooterConstants.kRightFlywheelController);
       m_indexer = new Indexer(new IndexerIOSim());
     }
 
@@ -104,7 +105,7 @@ public class RobotContainer {
   }
 
   private void configureControllers() {
-    m_driverControls = new DriverControlsXbox(1);
+    m_driverControls = new DriverControlsPS5(1);
   }
 
   private void configureButtonBindings() {
@@ -120,8 +121,8 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_shooter.setFlywheelVelocity(2, 4);
-                  m_shooter.setPivotAngle(Rotation2d.fromDegrees(60));
+                  m_shooter.setFlywheelVelocity(10, 13);
+                  m_shooter.setPivotAngle(Rotation2d.fromDegrees(45));
                 }))
         .onFalse(
             Commands.runOnce(
@@ -129,12 +130,11 @@ public class RobotContainer {
                   m_shooter.setFlywheelVelocity(0.0, 0.0);
                   m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
                 }));
-    
-    m_driverControls.testIndexer().onTrue(
-      m_indexer.runIndexer(6.0)
-    ).onFalse(
-      m_indexer.runIndexer(0.0)
-    );
+
+    m_driverControls
+        .testIndexer()
+        .onTrue(m_indexer.runIndexer(6.0))
+        .onFalse(m_indexer.runIndexer(0.0));
   }
 
   public void updateRobotState() {
