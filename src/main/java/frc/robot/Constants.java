@@ -34,7 +34,7 @@ public final class Constants {
 
     // Shooter pivot
     public static final double kPivotGearRatio = 46.722;
-    // TODO: untuned values, fix later
+
     public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(55);
     public static final Rotation2d kMinAngle = Rotation2d.fromDegrees(15);
     public static final Rotation2d kHomeAngle = Rotation2d.fromDegrees(33);
@@ -104,7 +104,7 @@ public final class Constants {
     public static final int kIndexerBeamBreakTwo = 3;
 
     public static final int kIntakeRoller = 43;
-    public static final int kIntakePivot = 0;
+    public static final int kIntakePivot = 33;
 
     public static final int kClimbUp = 26;
     public static final int kClimbDown = 25;

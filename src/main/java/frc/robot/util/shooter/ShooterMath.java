@@ -1,4 +1,4 @@
-package frc.robot.utils.shooter;
+package frc.robot.util.shooter;
 
 import frc.robot.subsystems.shooter.Shooter.ShooterPosition;
 

@@ -21,6 +21,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.oi.DriverControls;
 import frc.robot.oi.DriverControlsPS5;
+import frc.robot.oi.DriverControlsXbox;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOSim;
@@ -105,7 +106,11 @@ public class RobotContainer {
   }
 
   private void configureControllers() {
-    m_driverControls = new DriverControlsPS5(1);
+    if (RobotBase.isReal()) {
+      m_driverControls = new DriverControlsPS5(1);
+    } else {
+      m_driverControls = new DriverControlsXbox(1);
+    }
   }
 
   private void configureButtonBindings() {
@@ -122,7 +127,7 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   m_shooter.setFlywheelVelocity(10, 13);
-                  m_shooter.setPivotAngle(Rotation2d.fromDegrees(45));
+                  m_shooter.setPivotAngle(Rotation2d.fromDegrees(50));
                 }))
         .onFalse(
             Commands.runOnce(
