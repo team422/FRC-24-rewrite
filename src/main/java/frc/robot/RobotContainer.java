@@ -81,7 +81,10 @@ public class RobotContainer {
       m_indexer =
           new Indexer(
               new IndexerIOFalcon(
-                  Ports.kKicker, Ports.kIndexerBeamBreakOne, Ports.kIndexerBeamBreakTwo));
+                  Ports.kKicker,
+                  Ports.kFeeder,
+                  Ports.kIndexerBeamBreakOne,
+                  Ports.kIndexerBeamBreakTwo));
     } else {
       m_drive =
           new Drive(
@@ -106,6 +109,7 @@ public class RobotContainer {
   }
 
   private void configureControllers() {
+    // usually use ps5 on actual robot but xbox is better for keyboard testing
     if (RobotBase.isReal()) {
       m_driverControls = new DriverControlsPS5(1);
     } else {
@@ -137,9 +141,14 @@ public class RobotContainer {
                 }));
 
     m_driverControls
-        .testIndexer()
-        .onTrue(m_indexer.runIndexer(6.0))
-        .onFalse(m_indexer.runIndexer(0.0));
+        .testKicker()
+        .onTrue(m_indexer.runKicker(6.0))
+        .onFalse(m_indexer.runKicker(0.0));
+
+    m_driverControls
+        .testFeeder()
+        .onTrue(m_indexer.runFeeder(6.0))
+        .onFalse(m_indexer.runFeeder(0.0));
   }
 
   public void updateRobotState() {

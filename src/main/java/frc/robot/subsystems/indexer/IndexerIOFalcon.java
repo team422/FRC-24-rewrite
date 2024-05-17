@@ -7,37 +7,63 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class IndexerIOFalcon implements IndexerIO {
-  private TalonFX m_indexerMotor;
+  private TalonFX m_kickerMotor;
+  private TalonFX m_feederMotor;
   private DigitalInput m_beamBreakOne;
   private DigitalInput m_beamBreakTwo;
 
-  private StatusSignal<Double> m_curVelocity;
-  private StatusSignal<Double> m_curVoltage;
-  private StatusSignal<Double> m_curAmps;
+  private StatusSignal<Double> m_curKickerVelocity;
+  private StatusSignal<Double> m_curKickerVoltage;
+  private StatusSignal<Double> m_curKickerAmps;
+  private StatusSignal<Double> m_curFeederVelocity;
+  private StatusSignal<Double> m_curFeederVoltage;
+  private StatusSignal<Double> m_curFeederAmps;
 
-  public IndexerIOFalcon(int motorPort, int beamBreakOnePort, int beamBreakTwoPort) {
-    m_indexerMotor = new TalonFX(motorPort);
+  public IndexerIOFalcon(
+      int kickerPort, int feederPort, int beamBreakOnePort, int beamBreakTwoPort) {
+    m_kickerMotor = new TalonFX(kickerPort);
+    m_feederMotor = new TalonFX(feederPort);
     m_beamBreakOne = new DigitalInput(beamBreakOnePort);
     m_beamBreakTwo = new DigitalInput(beamBreakTwoPort);
 
-    m_curVelocity = m_indexerMotor.getVelocity();
-    m_curVoltage = m_indexerMotor.getMotorVoltage();
-    m_curAmps = m_indexerMotor.getSupplyCurrent();
+    m_curKickerVelocity = m_kickerMotor.getVelocity();
+    m_curKickerVoltage = m_kickerMotor.getMotorVoltage();
+    m_curKickerAmps = m_kickerMotor.getSupplyCurrent();
+
+    m_curFeederVelocity = m_feederMotor.getVelocity();
+    m_curFeederVoltage = m_feederMotor.getMotorVoltage();
+    m_curFeederAmps = m_feederMotor.getSupplyCurrent();
   }
 
   @Override
   public void updateInputs(IndexerInputs inputs) {
-    BaseStatusSignal.refreshAll(m_curVelocity, m_curVoltage, m_curAmps);
+    BaseStatusSignal.refreshAll(
+        m_curKickerVelocity,
+        m_curKickerVoltage,
+        m_curKickerAmps,
+        m_curFeederVelocity,
+        m_curFeederVoltage,
+        m_curFeederAmps);
 
-    inputs.curVelocity = Units.rotationsToRadians(m_curVelocity.getValue());
-    inputs.curVoltage = m_curVoltage.getValue();
-    inputs.curAmps = m_curAmps.getValue();
+    inputs.curKickerVelocity = Units.rotationsToRadians(m_curKickerVelocity.getValue());
+    inputs.curKickerVoltage = m_curKickerVoltage.getValue();
+    inputs.curKickerAmps = m_curKickerAmps.getValue();
+
+    inputs.curFeederVelocity = Units.rotationsToRadians(m_curFeederVelocity.getValue());
+    inputs.curFeederVoltage = m_curFeederVoltage.getValue();
+    inputs.curFeederAmps = m_curFeederAmps.getValue();
+
     inputs.beamBreakOneBroken = m_beamBreakOne.get();
     inputs.beamBreakTwoBroken = m_beamBreakTwo.get();
   }
 
   @Override
-  public void setVoltage(double voltage) {
-    m_indexerMotor.setVoltage(voltage);
+  public void setKickerVoltage(double voltage) {
+    m_kickerMotor.setVoltage(voltage);
+  }
+
+  @Override
+  public void setFeederVoltage(double voltage) {
+    m_feederMotor.setVoltage(voltage);
   }
 }

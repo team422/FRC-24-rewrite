@@ -6,12 +6,17 @@ import org.littletonrobotics.junction.AutoLog;
 public interface IndexerIO extends LoggedIO<IndexerIO.IndexerInputs> {
   @AutoLog
   public static class IndexerInputs {
-    public double curVelocity;
-    public double curVoltage;
-    public double curAmps;
+    public double curKickerVelocity;
+    public double curKickerVoltage;
+    public double curKickerAmps;
+    public double curFeederVelocity;
+    public double curFeederVoltage;
+    public double curFeederAmps;
     public boolean beamBreakOneBroken;
     public boolean beamBreakTwoBroken;
   }
 
-  public void setVoltage(double voltage);
+  public void setKickerVoltage(double voltage);
+
+  public void setFeederVoltage(double voltage);
 }

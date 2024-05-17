@@ -85,14 +85,14 @@ public class RobotState {
   public void updateMechanism() {
     m_shooterPivotMechLower.setAngle(m_shooter.getPivotAngle().getDegrees() + 180);
     m_shooterPivotMechUpper.setAngle(m_shooter.getPivotAngle().getDegrees());
+
+    Logger.recordOutput("Mechanism", m_mechanism);
   }
 
   public void updateComponents() {
     Pose3d shooterPose =
         new Pose3d(
             kShooterZeroTranslation, new Rotation3d(0, -m_shooter.getPivotAngle().getRadians(), 0));
-
-    Logger.recordOutput("Mechanism", m_mechanism);
 
     Logger.recordOutput("Components/ShooterPose", shooterPose);
     Logger.recordOutput("Components/ZeroPose", new Pose3d()); // for tuning config

@@ -31,7 +31,12 @@ public class DriverControlsXbox implements DriverControls {
   }
 
   @Override
-  public Trigger testIndexer() {
+  public Trigger testKicker() {
     return m_controller.button(2);
+  }
+
+  @Override
+  public Trigger testFeeder() {
+    return m_controller.button(3);
   }
 }
