@@ -14,6 +14,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
@@ -28,7 +29,7 @@ import frc.lib.utils.LoggedTunableNumber;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final boolean tuningMode = false;
+  public static final boolean tuningMode = true;
 
   public static final class ShooterConstants {
 
@@ -42,7 +43,7 @@ public final class Constants {
     public static final Rotation2d kPivotOffset = Rotation2d.fromDegrees(170);
 
     public static final LoggedTunableNumber kPivotP =
-        new LoggedTunableNumber("Shooter Pivot P", 1.0);
+        new LoggedTunableNumber("Shooter Pivot P", 4.0);
     public static final LoggedTunableNumber kPivotI =
         new LoggedTunableNumber("Shooter Pivot I", 0.0);
     public static final LoggedTunableNumber kPivotD =
@@ -60,11 +61,11 @@ public final class Constants {
     public static final double kFlywheelDiameter = Units.inchesToMeters(4.0);
 
     public static final LoggedTunableNumber kLeftFlywheelP =
-        new LoggedTunableNumber("Shooter Flywheel P", 0.7);
+        new LoggedTunableNumber("Shooter Left Flywheel P", 1.0);
     public static final LoggedTunableNumber kLeftFlywheelI =
-        new LoggedTunableNumber("Shooter Flywheel I", 0.0);
+        new LoggedTunableNumber("Shooter Left Flywheel I", 0.0);
     public static final LoggedTunableNumber kLeftFlywheelD =
-        new LoggedTunableNumber("Shooter Flywheel D", 0.0);
+        new LoggedTunableNumber("Shooter Left Flywheel D", 0.0);
     public static final double kLeftFlywheelVelocity = 10.0;
     public static final double kLeftFlywheelAcceleration = 15.0;
     public static final ProfiledPIDController kLeftFlywheelController =
@@ -75,11 +76,11 @@ public final class Constants {
             new Constraints(kLeftFlywheelVelocity, kLeftFlywheelAcceleration));
 
     public static final LoggedTunableNumber kRightFlywheelP =
-        new LoggedTunableNumber("Shooter Flywheel P", 0.7);
+        new LoggedTunableNumber("Shooter Right Flywheel P", 1.0);
     public static final LoggedTunableNumber kRightFlywheelI =
-        new LoggedTunableNumber("Shooter Flywheel I", 0.0);
+        new LoggedTunableNumber("Shooter Right Flywheel I", 0.0);
     public static final LoggedTunableNumber kRightFlywheelD =
-        new LoggedTunableNumber("Shooter Flywheel D", 0.0);
+        new LoggedTunableNumber("Shooter Right Flywheel D", 0.0);
     public static final double kRightFlywheelVelocity = 10.0;
     public static final double kRightFlywheelAcceleration = 15.0;
     public static final ProfiledPIDController kRightFlywheelController =
@@ -88,6 +89,25 @@ public final class Constants {
             kRightFlywheelI.get(),
             kRightFlywheelD.get(),
             new Constraints(kRightFlywheelVelocity, kRightFlywheelAcceleration));
+
+    public static final LoggedTunableNumber kRightFlywheelKs =
+        new LoggedTunableNumber("Shooter Right Flywheel kS", 0.38);
+    public static final LoggedTunableNumber kRightFlywheelKv =
+        new LoggedTunableNumber("Shooter Right Flywheel kV", 0.27);
+    public static final SimpleMotorFeedforward kRightFlywheelFeedforward =
+        new SimpleMotorFeedforward(kRightFlywheelKs.get(), kRightFlywheelKv.get());
+
+    public static final LoggedTunableNumber kLeftFlywheelKs =
+        new LoggedTunableNumber("Shooter Left Flywheel kS", 0.32);
+    public static final LoggedTunableNumber kLeftFlywheelKv =
+        new LoggedTunableNumber("Shooter Left Flywheel kV", 0.27);
+    public static final SimpleMotorFeedforward kLeftFlywheelFeedforward =
+        new SimpleMotorFeedforward(kLeftFlywheelKs.get(), kLeftFlywheelKv.get());
+
+    public static final LoggedTunableNumber kTestLeftFlywheelSpeed =
+        new LoggedTunableNumber("Left test flywheel speed", 0.0);
+    public static final LoggedTunableNumber kTestRightFlywheelSpeed =
+        new LoggedTunableNumber("Right test flywheel speed", 20.0);
   }
 
   public static final class Ports {

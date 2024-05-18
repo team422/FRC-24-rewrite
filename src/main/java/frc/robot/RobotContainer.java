@@ -77,7 +77,9 @@ public class RobotContainer {
               new FlywheelIOKraken(Ports.kFlywheelLeft, Ports.kFlywheelRight),
               ShooterConstants.kPivotController,
               ShooterConstants.kLeftFlywheelController,
-              ShooterConstants.kRightFlywheelController);
+              ShooterConstants.kRightFlywheelController,
+              ShooterConstants.kLeftFlywheelFeedforward,
+              ShooterConstants.kRightFlywheelFeedforward);
       m_indexer =
           new Indexer(
               new IndexerIOFalcon(
@@ -99,7 +101,9 @@ public class RobotContainer {
               new FlywheelIOSim(),
               ShooterConstants.kPivotController,
               ShooterConstants.kLeftFlywheelController,
-              ShooterConstants.kRightFlywheelController);
+              ShooterConstants.kRightFlywheelController,
+              ShooterConstants.kLeftFlywheelFeedforward,
+              ShooterConstants.kRightFlywheelFeedforward);
       m_indexer = new Indexer(new IndexerIOSim());
     }
 
@@ -130,7 +134,9 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_shooter.setFlywheelVelocity(10, 13);
+                  m_shooter.setFlywheelVelocity(
+                      ShooterConstants.kTestLeftFlywheelSpeed.get(),
+                      ShooterConstants.kTestRightFlywheelSpeed.get());
                   m_shooter.setPivotAngle(Rotation2d.fromDegrees(50));
                 }))
         .onFalse(

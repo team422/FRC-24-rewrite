@@ -40,10 +40,15 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_rightCurrentSignal,
         m_rightVelocitySignal);
 
-    inputs.angularVelocity =
+    inputs.angularVelocityRad =
         new double[] {
           Units.rotationsToRadians(m_leftVelocitySignal.getValueAsDouble()),
           Units.rotationsToRadians(m_rightVelocitySignal.getValueAsDouble())
+        };
+
+    inputs.angularVelocityRPS =
+        new double[] {
+          m_leftVelocitySignal.getValueAsDouble(), m_rightVelocitySignal.getValueAsDouble()
         };
 
     inputs.linearVelocity =
