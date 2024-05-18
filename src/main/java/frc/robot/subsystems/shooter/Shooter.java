@@ -158,11 +158,13 @@ public class Shooter extends SubsystemBase {
         "Shooter/Flywheel/LeftFlywheelFeedforwardVoltage", leftFlywheelFeedforwardVoltage);
     Logger.recordOutput(
         "Shooter/Flywheel/RightFlywheelFeedforwardVoltage", rightFlywheelFeedforwardVoltage);
-    
+
     Logger.recordOutput(
-      "Shooter/Flywheel/LeftFlywheelSetVoltage", leftFlywheelPidVoltage + leftFlywheelFeedforwardVoltage);
+        "Shooter/Flywheel/LeftFlywheelSetVoltage",
+        leftFlywheelPidVoltage + leftFlywheelFeedforwardVoltage);
     Logger.recordOutput(
-      "Shooter/Flywheel/RightFlywheelSetVoltage", rightFlywheelPidVoltage + rightFlywheelFeedforwardVoltage);
+        "Shooter/Flywheel/RightFlywheelSetVoltage",
+        rightFlywheelPidVoltage + rightFlywheelFeedforwardVoltage);
 
     Logger.recordOutput(
         "Shooter/Flywheel/LeftFlywheelVelocity", m_flywheelInputs.linearVelocity[0]);

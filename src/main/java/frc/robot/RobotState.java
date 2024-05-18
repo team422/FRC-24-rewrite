@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import org.littletonrobotics.junction.Logger;
 
@@ -22,6 +23,7 @@ public class RobotState {
   private Drive m_drive;
   private Shooter m_shooter;
   private Indexer m_indexer;
+  private Intake m_intake;
 
   // mechanism
   private final boolean kMechanismEnabled = true;
@@ -33,11 +35,14 @@ public class RobotState {
   // advantagescope components
   private final boolean kComponentsEnabled = true;
   private final Translation3d kShooterZeroTranslation = new Translation3d(0.017, 0.0, 0.415);
+  MechanismLigament2d m_intakePivotMech;
 
-  private RobotState(Drive drive, Shooter shooter, Indexer indexer) {
+  private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake) {
     // subsystems
     m_drive = drive;
     m_shooter = shooter;
+    m_indexer = indexer;
+    m_intake = intake;
 
     // mechanism set up
     m_mechanism = new Mechanism2d(1.5, 1);
@@ -62,13 +67,24 @@ public class RobotState {
                 6,
                 new Color8Bit(Color.kPurple)));
 
+    MechanismRoot2d intakeRoot = m_mechanism.getRoot("intake", 0.5, 1);
+    m_intakePivotMech =
+        intakeRoot.append(
+            new MechanismLigament2d(
+                "pivot",
+                1,
+                180 - m_intake.getPivotAngle().getDegrees(),
+                6,
+                new Color8Bit(Color.kBlue)));
+
     // post to dashboard
     SmartDashboard.putData("Mech2d", m_mechanism);
   }
 
-  public static RobotState startInstance(Drive drive, Shooter shooter, Indexer indexer) {
+  public static RobotState startInstance(
+      Drive drive, Shooter shooter, Indexer indexer, Intake intake) {
     if (instance == null) {
-      instance = new RobotState(drive, shooter, indexer);
+      instance = new RobotState(drive, shooter, indexer, intake);
     } else {
       throw new IllegalStateException("RobotState instance already started");
     }

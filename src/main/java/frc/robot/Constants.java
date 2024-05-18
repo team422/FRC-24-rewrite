@@ -110,6 +110,30 @@ public final class Constants {
         new LoggedTunableNumber("Right test flywheel speed", 20.0);
   }
 
+  public static final class IntakeConstants {
+    public static final double kPivotGearRatio = 36.0 / 16;
+
+    // TODO: untuned values, fix later
+    public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(90);
+    public static final Rotation2d kMinAngle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d kHomeAngle = Rotation2d.fromDegrees(85);
+
+    public static final LoggedTunableNumber kPivotP =
+        new LoggedTunableNumber("Intake Pivot P", 1.0);
+    public static final LoggedTunableNumber kPivotI =
+        new LoggedTunableNumber("Intake Pivot I", 0.0);
+    public static final LoggedTunableNumber kPivotD =
+        new LoggedTunableNumber("Intake Pivot D", 0.0);
+    public static final double kPivotVelocity = 10.0;
+    public static final double kPivotAcceleration = 15.0;
+    public static final ProfiledPIDController kPivotController =
+        new ProfiledPIDController(
+            kPivotP.get(),
+            kPivotI.get(),
+            kPivotD.get(),
+            new Constraints(kPivotVelocity, kPivotAcceleration));
+  }
+
   public static final class Ports {
     public static final int kShooterPivotLeader = 39;
     public static final int kShooterPivotFollower = 40;

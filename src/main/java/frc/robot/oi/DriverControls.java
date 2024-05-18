@@ -14,4 +14,6 @@ public interface DriverControls {
   public Trigger testKicker();
 
   public Trigger testFeeder();
+
+  public Trigger testIntake();
 }

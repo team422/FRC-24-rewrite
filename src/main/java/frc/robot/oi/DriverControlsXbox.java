@@ -39,4 +39,8 @@ public class DriverControlsXbox implements DriverControls {
   public Trigger testFeeder() {
     return m_controller.button(3);
   }
+
+  public Trigger testIntake() {
+    return m_controller.button(4);
+  }
 }

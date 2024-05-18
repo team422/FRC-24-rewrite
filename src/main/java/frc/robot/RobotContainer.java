@@ -16,6 +16,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.DriveCommands;
@@ -29,6 +30,11 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.indexer.IndexerIOFalcon;
 import frc.robot.subsystems.indexer.IndexerIOSim;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.pivot.IntakePivotIONeo;
+import frc.robot.subsystems.intake.pivot.IntakePivotIOSim;
+import frc.robot.subsystems.intake.roller.RollerIOKraken;
+import frc.robot.subsystems.intake.roller.RollerIOSim;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOKraken;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOSim;
@@ -48,6 +54,7 @@ public class RobotContainer {
   private Drive m_drive;
   private Shooter m_shooter;
   private Indexer m_indexer;
+  private Intake m_intake;
 
   // Controllers
   private DriverControls m_driverControls;
@@ -87,6 +94,12 @@ public class RobotContainer {
                   Ports.kFeeder,
                   Ports.kIndexerBeamBreakOne,
                   Ports.kIndexerBeamBreakTwo));
+
+      m_intake =
+          new Intake(
+              new RollerIOKraken(Ports.kIntakeRoller),
+              new IntakePivotIONeo(Ports.kIntakePivot),
+              IntakeConstants.kPivotController);
     } else {
       m_drive =
           new Drive(
@@ -105,11 +118,15 @@ public class RobotContainer {
               ShooterConstants.kLeftFlywheelFeedforward,
               ShooterConstants.kRightFlywheelFeedforward);
       m_indexer = new Indexer(new IndexerIOSim());
+
+      m_intake =
+          new Intake(new RollerIOSim(), new IntakePivotIOSim(), IntakeConstants.kPivotController);
     }
 
     m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
+    m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
 
-    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer);
+    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer, m_intake);
   }
 
   private void configureControllers() {
@@ -155,6 +172,21 @@ public class RobotContainer {
         .testFeeder()
         .onTrue(m_indexer.runFeeder(6.0))
         .onFalse(m_indexer.runFeeder(0.0));
+
+    m_driverControls
+        .testIntake()
+        .onTrue(
+            Commands.runOnce(
+                () -> {
+                  m_intake.setRollerVoltage(12);
+                  m_intake.setPivotAngle(Rotation2d.fromDegrees(15));
+                }))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  m_intake.setRollerVoltage(0);
+                  m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
+                }));
   }
 
   public void updateRobotState() {
