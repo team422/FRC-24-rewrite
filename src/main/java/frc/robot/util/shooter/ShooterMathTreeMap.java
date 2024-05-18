@@ -27,7 +27,7 @@ public class ShooterMathTreeMap implements ShooterMath {
   }
 
   @Override
-  public ShooterPosition calculateShooterPosition(double distance, double angle) {
+  public ShooterPosition calculateShooterPosition(double distance) {
     distance += kMeasurementOffset;
     return new ShooterPosition(
         Rotation2d.fromDegrees(m_shootAngle.get(distance)),
@@ -48,7 +48,7 @@ public class ShooterMathTreeMap implements ShooterMath {
   }
 
   @Override
-  public double calculatePivotAngle(double distance, double angle) {
+  public double calculatePivotAngle(double distance) {
     distance += kMeasurementOffset;
     return m_shootAngle.get(distance);
   }
