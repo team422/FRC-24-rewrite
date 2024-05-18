@@ -41,6 +41,9 @@
 
 # Log file
 *.log
+*.wpilog
+advantagekit/logs
+logs
 
 # BlueJ files
 *.ctxt
