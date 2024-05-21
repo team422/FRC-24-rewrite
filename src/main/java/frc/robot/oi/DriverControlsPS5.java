@@ -44,4 +44,9 @@ public class DriverControlsPS5 implements DriverControls {
   public Trigger testIntake() {
     return m_controller.R2();
   }
+
+  @Override
+  public Trigger deployAmp() {
+    return m_controller.triangle();
+  }
 }

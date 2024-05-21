@@ -16,6 +16,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
@@ -23,6 +24,9 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.oi.DriverControls;
 import frc.robot.oi.DriverControlsPS5;
 import frc.robot.oi.DriverControlsXbox;
+import frc.robot.subsystems.amp.Amp;
+import frc.robot.subsystems.amp.AmpIOFalcon;
+import frc.robot.subsystems.amp.AmpIOSim;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOSim;
@@ -55,6 +59,7 @@ public class RobotContainer {
   private Shooter m_shooter;
   private Indexer m_indexer;
   private Intake m_intake;
+  private Amp m_amp;
 
   // Controllers
   private DriverControls m_driverControls;
@@ -75,6 +80,7 @@ public class RobotContainer {
               new ModuleIOTalonFX(1),
               new ModuleIOTalonFX(2),
               new ModuleIOTalonFX(3));
+
       m_shooter =
           new Shooter(
               new ShooterPivotIOFalcon(
@@ -87,6 +93,7 @@ public class RobotContainer {
               ShooterConstants.kRightFlywheelController,
               ShooterConstants.kLeftFlywheelFeedforward,
               ShooterConstants.kRightFlywheelFeedforward);
+
       m_indexer =
           new Indexer(
               new IndexerIOFalcon(
@@ -100,6 +107,8 @@ public class RobotContainer {
               new RollerIOKraken(Ports.kIntakeRoller),
               new IntakePivotIONeo(Ports.kIntakePivot),
               IntakeConstants.kPivotController);
+
+      m_amp = new Amp(new AmpIOFalcon(Ports.kAmp), AmpConstants.kController);
     } else {
       m_drive =
           new Drive(
@@ -108,6 +117,7 @@ public class RobotContainer {
               new ModuleIOSim(),
               new ModuleIOSim(),
               new ModuleIOSim());
+
       m_shooter =
           new Shooter(
               new ShooterPivotIOSim(),
@@ -117,16 +127,19 @@ public class RobotContainer {
               ShooterConstants.kRightFlywheelController,
               ShooterConstants.kLeftFlywheelFeedforward,
               ShooterConstants.kRightFlywheelFeedforward);
+
       m_indexer = new Indexer(new IndexerIOSim());
 
       m_intake =
           new Intake(new RollerIOSim(), new IntakePivotIOSim(), IntakeConstants.kPivotController);
+
+      m_amp = new Amp(new AmpIOSim(), AmpConstants.kController);
     }
 
     m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
     m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
 
-    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer, m_intake);
+    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer, m_intake, m_amp);
   }
 
   private void configureControllers() {
@@ -187,6 +200,11 @@ public class RobotContainer {
                   m_intake.setRollerVoltage(0);
                   m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
                 }));
+
+    m_driverControls
+        .deployAmp()
+        .onTrue(Commands.runOnce(() -> m_amp.setAmpAngle(AmpConstants.kDeployedAngle)))
+        .onFalse(Commands.runOnce(() -> m_amp.setAmpAngle(AmpConstants.kHomeAngle)));
   }
 
   public void updateRobotState() {

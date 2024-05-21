@@ -40,7 +40,13 @@ public class DriverControlsXbox implements DriverControls {
     return m_controller.button(3);
   }
 
+  @Override
   public Trigger testIntake() {
     return m_controller.button(4);
+  }
+
+  @Override
+  public Trigger deployAmp() {
+    return m_controller.button(5);
   }
 }

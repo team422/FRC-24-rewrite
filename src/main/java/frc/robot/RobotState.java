@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.subsystems.amp.Amp;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
@@ -25,6 +26,7 @@ public class RobotState {
   private Shooter m_shooter;
   private Indexer m_indexer;
   private Intake m_intake;
+  private Amp m_amp;
 
   // mechanism
   private final boolean kMechanismEnabled = true;
@@ -43,12 +45,13 @@ public class RobotState {
           new Translation3d(-0.269, -0.01, 0.2428),
           new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(180), 0.0));
 
-  private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake) {
+  private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake, Amp amp) {
     // subsystems
     m_drive = drive;
     m_shooter = shooter;
     m_indexer = indexer;
     m_intake = intake;
+    m_amp = amp;
 
     // mechanism set up
     m_mechanism = new Mechanism2d(1.5, 1);
@@ -88,9 +91,9 @@ public class RobotState {
   }
 
   public static RobotState startInstance(
-      Drive drive, Shooter shooter, Indexer indexer, Intake intake) {
+      Drive drive, Shooter shooter, Indexer indexer, Intake intake, Amp amp) {
     if (instance == null) {
-      instance = new RobotState(drive, shooter, indexer, intake);
+      instance = new RobotState(drive, shooter, indexer, intake, amp);
     } else {
       throw new IllegalStateException("RobotState instance already started");
     }

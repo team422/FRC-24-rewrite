@@ -12,7 +12,7 @@ public class IntakePivotIOSim implements IntakePivotIO {
   public IntakePivotIOSim() {
     DCMotor gearbox = DCMotor.getNeo550(1);
     double gearing = 24.2391;
-    double armLength = 0.21;
+    double armLength = 0.381;
     double jKgMetersSquared = SingleJointedArmSim.estimateMOI(armLength, 4);
     double minAngle = IntakeConstants.kMinAngle.getDegrees();
     double maxAngle = IntakeConstants.kMaxAngle.getDegrees();

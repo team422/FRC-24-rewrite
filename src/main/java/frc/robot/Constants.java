@@ -134,6 +134,22 @@ public final class Constants {
             new Constraints(kPivotVelocity, kPivotAcceleration));
   }
 
+  public static final class AmpConstants {
+    public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(90);
+    public static final Rotation2d kMinAngle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d kHomeAngle = Rotation2d.fromDegrees(0);
+    public static final Rotation2d kDeployedAngle = Rotation2d.fromDegrees(70);
+
+    public static final LoggedTunableNumber kP = new LoggedTunableNumber("Amp P", 1.0);
+    public static final LoggedTunableNumber kI = new LoggedTunableNumber("Amp I", 0.0);
+    public static final LoggedTunableNumber kD = new LoggedTunableNumber("Amp D", 0.0);
+    public static final double kVelocity = 10.0;
+    public static final double kAcceleration = 15.0;
+    public static final ProfiledPIDController kController =
+        new ProfiledPIDController(
+            kP.get(), kI.get(), kD.get(), new Constraints(kVelocity, kAcceleration));
+  }
+
   public static final class Ports {
     public static final int kShooterPivotLeader = 39;
     public static final int kShooterPivotFollower = 40;

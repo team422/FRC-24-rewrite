@@ -15,7 +15,7 @@ public class ShooterPivotIOSim implements ShooterPivotIO {
             DCMotor.getFalcon500(2),
             46.722,
             10,
-            .24,
+            0.5334,
             ShooterConstants.kMinAngle.getRadians(),
             ShooterConstants.kMaxAngle.getRadians(),
             false,
