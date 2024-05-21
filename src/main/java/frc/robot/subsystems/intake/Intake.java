@@ -42,8 +42,11 @@ public class Intake extends SubsystemBase {
     Logger.processInputs("Intake/Roller", m_rollerInputs);
 
     Logger.recordOutput("Intake/Pivot/PIDVoltage", pivotPidVoltage);
-    Logger.recordOutput("Intake/Pivot/DesiredAngle", m_pivotController.getSetpoint().position);
-    Logger.recordOutput("Intake/CurrentAngle", Units.radiansToDegrees(pivotPidVoltage));
+    Logger.recordOutput(
+        "Intake/Pivot/DesiredAngle",
+        Units.radiansToDegrees(m_pivotController.getSetpoint().position));
+    Logger.recordOutput(
+        "Intake/Pivot/CurrentAngle", Units.radiansToDegrees(m_pivotInputs.curAngle));
   }
 
   public void setRollerVoltage(double voltage) {

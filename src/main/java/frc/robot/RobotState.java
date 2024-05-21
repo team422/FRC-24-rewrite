@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -31,11 +32,16 @@ public class RobotState {
 
   MechanismLigament2d m_shooterPivotMechLower;
   MechanismLigament2d m_shooterPivotMechUpper;
+  MechanismLigament2d m_intakePivotMech;
 
   // advantagescope components
   private final boolean kComponentsEnabled = true;
-  private final Translation3d kShooterZeroTranslation = new Translation3d(0.017, 0.0, 0.415);
-  MechanismLigament2d m_intakePivotMech;
+  private final Pose3d kShooterZeroPose =
+      new Pose3d(new Translation3d(0.017, 0.0, 0.415), new Rotation3d());
+  private final Pose3d kIntakeZeroPose =
+      new Pose3d(
+          new Translation3d(-0.269, -0.01, 0.2428),
+          new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(180), 0.0));
 
   private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake) {
     // subsystems
@@ -108,9 +114,20 @@ public class RobotState {
   public void updateComponents() {
     Pose3d shooterPose =
         new Pose3d(
-            kShooterZeroTranslation, new Rotation3d(0, -m_shooter.getPivotAngle().getRadians(), 0));
+            kShooterZeroPose.getTranslation(),
+            kShooterZeroPose
+                .getRotation()
+                .rotateBy(new Rotation3d(0, -m_shooter.getPivotAngle().getRadians(), 0)));
+    Pose3d intakePose =
+        new Pose3d(
+            kIntakeZeroPose.getTranslation(),
+            kIntakeZeroPose
+                .getRotation()
+                .rotateBy(new Rotation3d(0, m_intake.getPivotAngle().getRadians(), 0)));
 
     Logger.recordOutput("Components/ShooterPose", shooterPose);
+    Logger.recordOutput("Components/IntakePose", intakePose);
+    Logger.recordOutput("Components/Poses", new Pose3d[] {shooterPose, intakePose});
     Logger.recordOutput("Components/ZeroPose", new Pose3d()); // for tuning config
   }
 
