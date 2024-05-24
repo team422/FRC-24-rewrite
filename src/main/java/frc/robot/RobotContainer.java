@@ -173,13 +173,14 @@ public class RobotContainer {
         .onTrue(m_indexer.runFeeder(6.0))
         .onFalse(m_indexer.runFeeder(0.0));
 
+
     m_driverControls
         .testIntake()
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_intake.setRollerVoltage(12);
-                  m_intake.setPivotAngle(Rotation2d.fromDegrees(15));
+                  m_intake.setRollerVoltage(8);
+                  m_intake.setPivotAngle(Rotation2d.fromDegrees(IntakeConstants.kTestPivotAngle.get()));
                 }))
         .onFalse(
             Commands.runOnce(

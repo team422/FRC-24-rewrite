@@ -132,6 +132,9 @@ public final class Constants {
             kPivotI.get(),
             kPivotD.get(),
             new Constraints(kPivotVelocity, kPivotAcceleration));
+
+    public static final LoggedTunableNumber kTestPivotAngle =
+        new LoggedTunableNumber("Test Intake Pivot Angle", 15.0);
   }
 
   public static final class Ports {
