@@ -133,9 +133,9 @@ public class RobotContainer {
   private void configureControllers() {
     // usually use ps5 on actual robot but xbox is better for keyboard testing
     if (RobotBase.isReal()) {
-      m_driverControls = new DriverControlsXbox(1);
-    } else {
       m_driverControls = new DriverControlsPS5(1);
+    } else {
+      m_driverControls = new DriverControlsXbox(1);
     }
   }
 
@@ -154,6 +154,7 @@ public class RobotContainer {
                 () -> {
                   m_shooter.setFlywheelVelocity(17.0, 20.0);
                   m_shooter.setPivotAngle(Rotation2d.fromDegrees(50));
+                  // deploy intake so shooter pivot doesn't run into it
                   m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
                 }))
         .onFalse(
@@ -175,7 +176,7 @@ public class RobotContainer {
             Commands.runOnce(
                 () -> {
                   m_indexer.setFeederVoltage(IndexerConstants.kFeederVoltage);
-                  m_intake.setRollerVoltage(-4.0);
+                  m_intake.setRollerVoltage(IntakeConstants.kDeployRollerVoltage);
                   m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
                 }))
         .onFalse(

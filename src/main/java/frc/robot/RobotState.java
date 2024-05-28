@@ -41,7 +41,7 @@ public class RobotState {
   private final Pose3d kIntakeZeroPose =
       new Pose3d(
           new Translation3d(-0.269, -0.01, 0.2428),
-          new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(180), 0.0));
+          new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(170), 0.0));
 
   private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake) {
     // subsystems
@@ -51,8 +51,8 @@ public class RobotState {
     m_intake = intake;
 
     // mechanism set up
-    m_mechanism = new Mechanism2d(1.5, 1);
-    MechanismRoot2d m_root = m_mechanism.getRoot("shooter", 1.0, 0.5);
+    m_mechanism = new Mechanism2d(1.75, 1);
+    MechanismRoot2d m_root = m_mechanism.getRoot("shooter", 1.25, 0.5);
 
     // have as two ligaments so it can rotate around center
     m_shooterPivotMechLower =
@@ -73,13 +73,13 @@ public class RobotState {
                 6,
                 new Color8Bit(Color.kPurple)));
 
-    MechanismRoot2d intakeRoot = m_mechanism.getRoot("intake", 0.5, 1);
+    MechanismRoot2d intakeRoot = m_mechanism.getRoot("intake", 0.7, 0.25);
     m_intakePivotMech =
         intakeRoot.append(
             new MechanismLigament2d(
                 "pivot",
-                1,
-                180 - m_intake.getPivotAngle().getDegrees(),
+                0.65,
+                185 - m_intake.getPivotAngle().getDegrees(),
                 6,
                 new Color8Bit(Color.kBlue)));
 
@@ -107,6 +107,7 @@ public class RobotState {
   public void updateMechanism() {
     m_shooterPivotMechLower.setAngle(m_shooter.getPivotAngle().getDegrees() + 180);
     m_shooterPivotMechUpper.setAngle(m_shooter.getPivotAngle().getDegrees());
+    m_intakePivotMech.setAngle(185 - m_intake.getPivotAngle().getDegrees());
 
     Logger.recordOutput("Mechanism", m_mechanism);
   }

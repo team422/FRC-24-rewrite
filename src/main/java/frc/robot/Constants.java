@@ -102,6 +102,7 @@ public final class Constants {
     public static final Rotation2d kHomeAngle = Rotation2d.fromDegrees(120);
     public static final Rotation2d kDeployedAngle = Rotation2d.fromDegrees(15);
 
+    // don't ask me why it's negative, just a hardware thing
     public static final double kDeployRollerVoltage = -6.0;
 
     public static final Rotation2d kPivotOffset = Rotation2d.fromDegrees(123);

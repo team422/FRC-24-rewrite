@@ -1,6 +1,5 @@
 package frc.robot.subsystems.intake.pivot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants.IntakeConstants;
@@ -14,9 +13,9 @@ public class IntakePivotIOSim implements IntakePivotIO {
     double gearing = 24.2391;
     double armLength = 0.21;
     double jKgMetersSquared = SingleJointedArmSim.estimateMOI(armLength, 4);
-    double minAngle = IntakeConstants.kMinAngle.getDegrees();
-    double maxAngle = IntakeConstants.kMaxAngle.getDegrees();
-    double startingAngle = IntakeConstants.kHomeAngle.getDegrees();
+    double minAngle = IntakeConstants.kMinAngle.getRadians();
+    double maxAngle = IntakeConstants.kMaxAngle.getRadians();
+    double startingAngle = IntakeConstants.kHomeAngle.getRadians();
 
     m_sim =
         new SingleJointedArmSim(
@@ -36,7 +35,7 @@ public class IntakePivotIOSim implements IntakePivotIO {
   public void updateInputs(IntakePivotInputs inputs) {
     m_sim.update(0.02);
 
-    inputs.curAngle = getCurrentAngle().getRadians();
+    inputs.curAngle = m_sim.getAngleRads();
     inputs.curVoltage = m_voltage;
     inputs.curVelocity = m_sim.getVelocityRadPerSec();
     inputs.curAmps = m_sim.getCurrentDrawAmps();
@@ -46,10 +45,5 @@ public class IntakePivotIOSim implements IntakePivotIO {
   public void setVoltage(double voltage) {
     m_sim.setInputVoltage(voltage);
     m_voltage = voltage;
-  }
-
-  @Override
-  public Rotation2d getCurrentAngle() {
-    return Rotation2d.fromRadians(m_sim.getAngleRads());
   }
 }

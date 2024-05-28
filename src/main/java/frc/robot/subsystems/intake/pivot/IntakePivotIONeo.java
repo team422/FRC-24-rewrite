@@ -2,7 +2,6 @@ package frc.robot.subsystems.intake.pivot;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.IntakeConstants;
 
@@ -20,7 +19,7 @@ public class IntakePivotIONeo implements IntakePivotIO {
 
   @Override
   public void updateInputs(IntakePivotInputs inputs) {
-    inputs.curAngle = m_encoder.getPosition();
+    inputs.curAngle = Units.rotationsToRadians(m_encoder.getPosition());
     inputs.curVelocity =
         Units.rotationsPerMinuteToRadiansPerSecond(m_motor.getEncoder().getVelocity());
     inputs.curVoltage = m_motor.getAppliedOutput();
@@ -30,10 +29,5 @@ public class IntakePivotIONeo implements IntakePivotIO {
   @Override
   public void setVoltage(double voltage) {
     m_motor.setVoltage(voltage);
-  }
-
-  @Override
-  public Rotation2d getCurrentAngle() {
-    return Rotation2d.fromRotations(m_encoder.getPosition());
   }
 }
