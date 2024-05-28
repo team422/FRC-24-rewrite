@@ -12,36 +12,31 @@ public class DriverControlsPS5 implements DriverControls {
 
   @Override
   public double getDriveForward() {
-    return m_controller.getLeftY();
+    return -m_controller.getLeftY();
   }
 
   @Override
   public double getDriveLeft() {
-    return m_controller.getLeftX();
+    return -m_controller.getLeftX();
   }
 
   @Override
   public double getDriveRotation() {
-    return m_controller.getRightX();
+    return -m_controller.getRightX();
   }
 
   @Override
-  public Trigger testShooter() {
+  public Trigger revShooter() {
     return m_controller.L2();
   }
 
   @Override
-  public Trigger testKicker() {
+  public Trigger runKicker() {
     return m_controller.R1();
   }
 
   @Override
-  public Trigger testFeeder() {
-    return m_controller.L1();
-  }
-
-  @Override
-  public Trigger testIntake() {
+  public Trigger deployIntake() {
     return m_controller.R2();
   }
 }

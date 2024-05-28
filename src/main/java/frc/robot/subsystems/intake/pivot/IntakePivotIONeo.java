@@ -14,11 +14,13 @@ public class IntakePivotIONeo implements IntakePivotIO {
     m_motor = new CANSparkMax(port, CANSparkMax.MotorType.kBrushless);
     m_encoder = m_motor.getAbsoluteEncoder();
     m_encoder.setPositionConversionFactor(IntakeConstants.kPivotGearRatio);
+
+    m_encoder.setZeroOffset(IntakeConstants.kPivotOffset.getRadians());
   }
 
   @Override
   public void updateInputs(IntakePivotInputs inputs) {
-    inputs.curAngle = Units.rotationsToRadians(m_encoder.getPosition());
+    inputs.curAngle = m_encoder.getPosition();
     inputs.curVelocity =
         Units.rotationsPerMinuteToRadiansPerSecond(m_motor.getEncoder().getVelocity());
     inputs.curVoltage = m_motor.getAppliedOutput();

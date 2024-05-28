@@ -6,6 +6,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.utils.LoggedTunableNumber;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.intake.pivot.IntakePivotIO;
 import frc.robot.subsystems.intake.pivot.IntakePivotInputsAutoLogged;
 import frc.robot.subsystems.intake.roller.RollerIO;
@@ -32,6 +34,17 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
+    LoggedTunableNumber.ifChanged(
+        hashCode(),
+        () -> {
+          m_pivotController.setP(IntakeConstants.kPivotP.get());
+          m_pivotController.setI(IntakeConstants.kPivotI.get());
+          m_pivotController.setD(IntakeConstants.kPivotD.get());
+        },
+        IntakeConstants.kPivotP,
+        IntakeConstants.kPivotI,
+        IntakeConstants.kPivotD);
+
     m_pivotIO.updateInputs(m_pivotInputs);
     m_rollerIO.updateInputs(m_rollerInputs);
 

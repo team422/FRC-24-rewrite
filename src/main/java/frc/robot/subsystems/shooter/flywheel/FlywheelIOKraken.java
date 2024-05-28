@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.flywheel;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.ShooterConstants;
@@ -76,7 +77,7 @@ public class FlywheelIOKraken implements FlywheelIO {
 
   @Override
   public void setVoltage(double leftVoltage, double rightVoltage) {
-    m_leftMotor.setVoltage(leftVoltage);
+    m_leftMotor.setControl(new VoltageOut(leftVoltage));
     m_rightMotor.setVoltage(rightVoltage);
   }
 }

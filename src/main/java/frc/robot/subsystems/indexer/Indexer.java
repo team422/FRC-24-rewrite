@@ -21,6 +21,14 @@ public class Indexer extends SubsystemBase {
     Logger.processInputs("Indexer", m_inputs);
   }
 
+  public void setKickerVoltage(double voltage) {
+    m_io.setKickerVoltage(voltage);
+  }
+
+  public void setFeederVoltage(double voltage) {
+    m_io.setFeederVoltage(voltage);
+  }
+
   public Command runKicker(double voltage) {
     return Commands.runOnce(() -> m_io.setKickerVoltage(voltage));
   }

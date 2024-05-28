@@ -9,11 +9,9 @@ public interface DriverControls {
 
   public double getDriveRotation();
 
-  public Trigger testShooter();
+  public Trigger revShooter();
 
-  public Trigger testKicker();
+  public Trigger runKicker();
 
-  public Trigger testFeeder();
-
-  public Trigger testIntake();
+  public Trigger deployIntake();
 }

@@ -16,6 +16,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
@@ -132,9 +133,9 @@ public class RobotContainer {
   private void configureControllers() {
     // usually use ps5 on actual robot but xbox is better for keyboard testing
     if (RobotBase.isReal()) {
-      m_driverControls = new DriverControlsPS5(1);
-    } else {
       m_driverControls = new DriverControlsXbox(1);
+    } else {
+      m_driverControls = new DriverControlsPS5(1);
     }
   }
 
@@ -147,45 +148,41 @@ public class RobotContainer {
             m_driverControls::getDriveRotation));
 
     m_driverControls
-        .testShooter()
+        .revShooter()
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_shooter.setFlywheelVelocity(
-                      ShooterConstants.kTestLeftFlywheelSpeed.get(),
-                      ShooterConstants.kTestRightFlywheelSpeed.get());
+                  m_shooter.setFlywheelVelocity(17.0, 20.0);
                   m_shooter.setPivotAngle(Rotation2d.fromDegrees(50));
+                  m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
                 }))
         .onFalse(
             Commands.runOnce(
                 () -> {
                   m_shooter.setFlywheelVelocity(0.0, 0.0);
                   m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
+                  m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
                 }));
 
     m_driverControls
-        .testKicker()
-        .onTrue(m_indexer.runKicker(6.0))
+        .runKicker()
+        .onTrue(m_indexer.runKicker(IndexerConstants.kKickerVoltage))
         .onFalse(m_indexer.runKicker(0.0));
 
     m_driverControls
-        .testFeeder()
-        .onTrue(m_indexer.runFeeder(6.0))
-        .onFalse(m_indexer.runFeeder(0.0));
-
-
-    m_driverControls
-        .testIntake()
+        .deployIntake()
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_intake.setRollerVoltage(8);
-                  m_intake.setPivotAngle(Rotation2d.fromDegrees(IntakeConstants.kTestPivotAngle.get()));
+                  m_indexer.setFeederVoltage(IndexerConstants.kFeederVoltage);
+                  m_intake.setRollerVoltage(-4.0);
+                  m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
                 }))
         .onFalse(
             Commands.runOnce(
                 () -> {
-                  m_intake.setRollerVoltage(0);
+                  m_indexer.setFeederVoltage(0.0);
+                  m_intake.setRollerVoltage(0.0);
                   m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
                 }));
   }
