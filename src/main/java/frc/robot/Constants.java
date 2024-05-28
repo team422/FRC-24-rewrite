@@ -148,5 +148,7 @@ public final class Constants {
     public static final int kClimbDown = 25;
 
     public static final int kAmp = 54;
+
+    public static final int kLed = 9;
   }
 }

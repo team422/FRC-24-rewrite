@@ -36,6 +36,7 @@ import frc.robot.subsystems.intake.pivot.IntakePivotIONeo;
 import frc.robot.subsystems.intake.pivot.IntakePivotIOSim;
 import frc.robot.subsystems.intake.roller.RollerIOKraken;
 import frc.robot.subsystems.intake.roller.RollerIOSim;
+import frc.robot.subsystems.led.Led;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOKraken;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIOSim;
@@ -56,6 +57,7 @@ public class RobotContainer {
   private Shooter m_shooter;
   private Indexer m_indexer;
   private Intake m_intake;
+  private Led m_led;
 
   // Controllers
   private DriverControls m_driverControls;
@@ -76,6 +78,7 @@ public class RobotContainer {
               new ModuleIOTalonFX(1),
               new ModuleIOTalonFX(2),
               new ModuleIOTalonFX(3));
+
       m_shooter =
           new Shooter(
               new ShooterPivotIOFalcon(
@@ -88,6 +91,7 @@ public class RobotContainer {
               ShooterConstants.kRightFlywheelController,
               ShooterConstants.kLeftFlywheelFeedforward,
               ShooterConstants.kRightFlywheelFeedforward);
+
       m_indexer =
           new Indexer(
               new IndexerIOFalcon(
@@ -101,6 +105,9 @@ public class RobotContainer {
               new RollerIOKraken(Ports.kIntakeRoller),
               new IntakePivotIONeo(Ports.kIntakePivot),
               IntakeConstants.kPivotController);
+
+      m_led = new Led(Ports.kLed, 20);
+
     } else {
       m_drive =
           new Drive(
@@ -122,12 +129,14 @@ public class RobotContainer {
 
       m_intake =
           new Intake(new RollerIOSim(), new IntakePivotIOSim(), IntakeConstants.kPivotController);
+
+      m_led = new Led(Ports.kLed, 20);
     }
 
     m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
     m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
 
-    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer, m_intake);
+    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer, m_intake, m_led);
   }
 
   private void configureControllers() {

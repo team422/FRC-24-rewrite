@@ -63,7 +63,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    RobotState.getInstance().onDisable();
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -78,6 +80,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
+
+    RobotState.getInstance().onEnableAutonomous();
   }
 
   /** This function is called periodically during autonomous. */
@@ -94,6 +98,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+
+    RobotState.getInstance().onEnableTeleop();
   }
 
   /** This function is called periodically during operator control. */

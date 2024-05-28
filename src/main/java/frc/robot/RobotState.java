@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.led.Led;
+import frc.robot.subsystems.led.Led.LedState;
 import frc.robot.subsystems.shooter.Shooter;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,6 +27,7 @@ public class RobotState {
   private Shooter m_shooter;
   private Indexer m_indexer;
   private Intake m_intake;
+  private Led m_led;
 
   // mechanism
   private final boolean kMechanismEnabled = true;
@@ -43,12 +46,13 @@ public class RobotState {
           new Translation3d(-0.269, -0.01, 0.2428),
           new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(170), 0.0));
 
-  private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake) {
+  private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake, Led led) {
     // subsystems
     m_drive = drive;
     m_shooter = shooter;
     m_indexer = indexer;
     m_intake = intake;
+    m_led = led;
 
     // mechanism set up
     m_mechanism = new Mechanism2d(1.75, 1);
@@ -88,9 +92,9 @@ public class RobotState {
   }
 
   public static RobotState startInstance(
-      Drive drive, Shooter shooter, Indexer indexer, Intake intake) {
+      Drive drive, Shooter shooter, Indexer indexer, Intake intake, Led led) {
     if (instance == null) {
-      instance = new RobotState(drive, shooter, indexer, intake);
+      instance = new RobotState(drive, shooter, indexer, intake, led);
     } else {
       throw new IllegalStateException("RobotState instance already started");
     }
@@ -102,6 +106,16 @@ public class RobotState {
       throw new IllegalStateException("RobotState instance not started");
     }
     return instance;
+  }
+
+  public void updateRobotState() {
+    if (kMechanismEnabled) {
+      updateMechanism();
+    }
+
+    if (kComponentsEnabled) {
+      updateComponents();
+    }
   }
 
   public void updateMechanism() {
@@ -132,13 +146,15 @@ public class RobotState {
     Logger.recordOutput("Components/ZeroPose", new Pose3d()); // for tuning config
   }
 
-  public void updateRobotState() {
-    if (kMechanismEnabled) {
-      updateMechanism();
-    }
+  public void onEnableTeleop() {
+    m_led.setState(LedState.TELEOP);
+  }
 
-    if (kComponentsEnabled) {
-      updateComponents();
-    }
+  public void onEnableAutonomous() {
+    m_led.setState(LedState.AUTONOMOUS);
+  }
+
+  public void onDisable() {
+    m_led.setState(LedState.DISABLED);
   }
 }
