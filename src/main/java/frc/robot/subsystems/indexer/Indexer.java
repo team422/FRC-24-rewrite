@@ -19,6 +19,11 @@ public class Indexer extends SubsystemBase {
     m_io.updateInputs(m_inputs);
 
     Logger.processInputs("Indexer", m_inputs);
+
+    // ready for match
+    Logger.recordOutput(
+        "ReadyForMatch/Indexer",
+        m_inputs.curFeederVelocity < 0.1 && m_inputs.curKickerVelocity < 0.1);
   }
 
   public void setKickerVoltage(double voltage) {

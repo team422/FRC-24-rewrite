@@ -60,6 +60,10 @@ public class Intake extends SubsystemBase {
         Units.radiansToDegrees(m_pivotController.getSetpoint().position));
     Logger.recordOutput(
         "Intake/Pivot/CurrentAngle", Units.radiansToDegrees(m_pivotInputs.curAngle));
+
+    // ready for match
+    Logger.recordOutput(
+        "ReadyForMatch/Intake", m_pivotController.atGoal() && m_rollerInputs.curVelocity < 0.1);
   }
 
   public void setRollerVoltage(double voltage) {

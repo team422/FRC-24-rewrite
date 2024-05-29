@@ -175,6 +175,13 @@ public class Shooter extends SubsystemBase {
         "Shooter/Flywheel/LeftFlywheelDesiredVelocity", m_leftFlywheelController.getSetpoint());
     Logger.recordOutput(
         "Shooter/Flywheel/RightFlywheelDesiredVelocity", m_rightFlywheelController.getSetpoint());
+
+    // ready for match
+    Logger.recordOutput(
+        "ReadyForMatch/Shooter",
+        m_pivotController.atGoal()
+            && m_flywheelInputs.linearVelocity[0] < 0.1
+            && m_flywheelInputs.linearVelocity[1] < 0.1);
   }
 
   public void setPivotAngle(Rotation2d angle) {
