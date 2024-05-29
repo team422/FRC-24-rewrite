@@ -40,11 +40,13 @@ public class RobotState {
   // advantagescope components
   private final boolean kComponentsEnabled = true;
   private final Pose3d kShooterZeroPose =
-      new Pose3d(new Translation3d(0.017, 0.0, 0.415), new Rotation3d());
+      new Pose3d(
+          new Translation3d(0.017, 0.0, 0.415),
+          new Rotation3d(0.0, Units.degreesToRadians(-2), 0.0));
   private final Pose3d kIntakeZeroPose =
       new Pose3d(
           new Translation3d(-0.269, -0.01, 0.2428),
-          new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(170), 0.0));
+          new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(201), 0.0));
 
   private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake, Led led) {
     // subsystems
