@@ -28,7 +28,7 @@ public class FlywheelIOSim implements FlywheelIO {
         new double[] {
           m_leftSim.getAngularVelocityRadPerSec(), m_leftSim.getAngularVelocityRadPerSec()
         };
-    
+
     inputs.angularVelocityRPS =
         new double[] {
           m_leftSim.getAngularVelocityRPM() / 60.0, m_rightSim.getAngularVelocityRPM() / 60.0

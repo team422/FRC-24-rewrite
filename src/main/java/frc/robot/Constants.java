@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -36,7 +37,7 @@ public final class Constants {
     // Shooter pivot
     public static final double kPivotGearRatio = 46.722;
 
-    public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(55);
+    public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(70);
     public static final Rotation2d kMinAngle = Rotation2d.fromDegrees(15);
     public static final Rotation2d kHomeAngle = Rotation2d.fromDegrees(33);
 
@@ -66,14 +67,8 @@ public final class Constants {
         new LoggedTunableNumber("Shooter Left Flywheel I", 0.0);
     public static final LoggedTunableNumber kLeftFlywheelD =
         new LoggedTunableNumber("Shooter Left Flywheel D", 0.0);
-    public static final double kLeftFlywheelVelocity = 10.0;
-    public static final double kLeftFlywheelAcceleration = 15.0;
-    public static final ProfiledPIDController kLeftFlywheelController =
-        new ProfiledPIDController(
-            kLeftFlywheelP.get(),
-            kLeftFlywheelI.get(),
-            kLeftFlywheelD.get(),
-            new Constraints(kLeftFlywheelVelocity, kLeftFlywheelAcceleration));
+    public static final PIDController kLeftFlywheelController =
+        new PIDController(kLeftFlywheelP.get(), kLeftFlywheelI.get(), kLeftFlywheelD.get());
 
     public static final LoggedTunableNumber kRightFlywheelP =
         new LoggedTunableNumber("Shooter Right Flywheel P", 1.0);
@@ -81,14 +76,8 @@ public final class Constants {
         new LoggedTunableNumber("Shooter Right Flywheel I", 0.0);
     public static final LoggedTunableNumber kRightFlywheelD =
         new LoggedTunableNumber("Shooter Right Flywheel D", 0.0);
-    public static final double kRightFlywheelVelocity = 10.0;
-    public static final double kRightFlywheelAcceleration = 15.0;
-    public static final ProfiledPIDController kRightFlywheelController =
-        new ProfiledPIDController(
-            kRightFlywheelP.get(),
-            kRightFlywheelI.get(),
-            kRightFlywheelD.get(),
-            new Constraints(kRightFlywheelVelocity, kRightFlywheelAcceleration));
+    public static final PIDController kRightFlywheelController =
+        new PIDController(kRightFlywheelP.get(), kRightFlywheelI.get(), kRightFlywheelD.get());
 
     public static final LoggedTunableNumber kRightFlywheelKs =
         new LoggedTunableNumber("Shooter Right Flywheel kS", 0.38);
@@ -103,11 +92,40 @@ public final class Constants {
         new LoggedTunableNumber("Shooter Left Flywheel kV", 0.27);
     public static final SimpleMotorFeedforward kLeftFlywheelFeedforward =
         new SimpleMotorFeedforward(kLeftFlywheelKs.get(), kLeftFlywheelKv.get());
+  }
 
-    public static final LoggedTunableNumber kTestLeftFlywheelSpeed =
-        new LoggedTunableNumber("Left test flywheel speed", 0.0);
-    public static final LoggedTunableNumber kTestRightFlywheelSpeed =
-        new LoggedTunableNumber("Right test flywheel speed", 20.0);
+  public static final class IntakeConstants {
+    public static final double kPivotGearRatio = 36.0 / 16;
+
+    public static final Rotation2d kMaxAngle = Rotation2d.fromDegrees(124);
+    public static final Rotation2d kMinAngle = Rotation2d.fromDegrees(5);
+    public static final Rotation2d kHomeAngle = Rotation2d.fromDegrees(120);
+    public static final Rotation2d kDeployedAngle = Rotation2d.fromDegrees(15);
+
+    // don't ask me why it's negative, just a hardware thing
+    public static final double kDeployRollerVoltage = -6.0;
+
+    public static final Rotation2d kPivotOffset = Rotation2d.fromDegrees(123);
+
+    public static final LoggedTunableNumber kPivotP =
+        new LoggedTunableNumber("Intake Pivot P", 3.0);
+    public static final LoggedTunableNumber kPivotI =
+        new LoggedTunableNumber("Intake Pivot I", 0.0);
+    public static final LoggedTunableNumber kPivotD =
+        new LoggedTunableNumber("Intake Pivot D", 0.0);
+    public static final double kPivotVelocity = 25.0;
+    public static final double kPivotAcceleration = 30.0;
+    public static final ProfiledPIDController kPivotController =
+        new ProfiledPIDController(
+            kPivotP.get(),
+            kPivotI.get(),
+            kPivotD.get(),
+            new Constraints(kPivotVelocity, kPivotAcceleration));
+  }
+
+  public static class IndexerConstants {
+    public static final double kFeederVoltage = 6.0;
+    public static final double kKickerVoltage = 6.0;
   }
 
   public static final class Ports {
@@ -130,5 +148,7 @@ public final class Constants {
     public static final int kClimbDown = 25;
 
     public static final int kAmp = 54;
+
+    public static final int kLed = 9;
   }
 }

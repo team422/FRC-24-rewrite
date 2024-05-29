@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,8 +38,8 @@ public class Shooter extends SubsystemBase {
   public final FlywheelInputsAutoLogged m_flywheelInputs;
 
   private ProfiledPIDController m_pivotController;
-  private ProfiledPIDController m_leftFlywheelController;
-  private ProfiledPIDController m_rightFlywheelController;
+  private PIDController m_leftFlywheelController;
+  private PIDController m_rightFlywheelController;
 
   private SimpleMotorFeedforward m_rightFlywheelFeedforward;
   private SimpleMotorFeedforward m_leftFlywheelFeedforward;
@@ -47,8 +48,8 @@ public class Shooter extends SubsystemBase {
       ShooterPivotIO pivotIO,
       FlywheelIO flywheelIO,
       ProfiledPIDController pivotController,
-      ProfiledPIDController leftFlywheelController,
-      ProfiledPIDController rightFlywheelController,
+      PIDController leftFlywheelController,
+      PIDController rightFlywheelController,
       SimpleMotorFeedforward leftFlywheelFeedforward,
       SimpleMotorFeedforward rightFlywheelFeedforward) {
 
@@ -134,9 +135,9 @@ public class Shooter extends SubsystemBase {
         m_rightFlywheelController.calculate(m_flywheelInputs.linearVelocity[1]);
 
     double leftFlywheelFeedforwardVoltage =
-        m_leftFlywheelFeedforward.calculate(m_leftFlywheelController.getGoal().position);
+        m_leftFlywheelFeedforward.calculate(m_leftFlywheelController.getSetpoint());
     double rightFlywheelFeedforwardVoltage =
-        m_rightFlywheelFeedforward.calculate(m_rightFlywheelController.getGoal().position);
+        m_rightFlywheelFeedforward.calculate(m_rightFlywheelController.getSetpoint());
 
     m_flywheelIO.setVoltage(
         leftFlywheelPidVoltage + leftFlywheelFeedforwardVoltage,
@@ -158,22 +159,22 @@ public class Shooter extends SubsystemBase {
         "Shooter/Flywheel/LeftFlywheelFeedforwardVoltage", leftFlywheelFeedforwardVoltage);
     Logger.recordOutput(
         "Shooter/Flywheel/RightFlywheelFeedforwardVoltage", rightFlywheelFeedforwardVoltage);
-    
+
     Logger.recordOutput(
-      "Shooter/Flywheel/LeftFlywheelSetVoltage", leftFlywheelPidVoltage + leftFlywheelFeedforwardVoltage);
+        "Shooter/Flywheel/LeftFlywheelSetVoltage",
+        leftFlywheelPidVoltage + leftFlywheelFeedforwardVoltage);
     Logger.recordOutput(
-      "Shooter/Flywheel/RightFlywheelSetVoltage", rightFlywheelPidVoltage + rightFlywheelFeedforwardVoltage);
+        "Shooter/Flywheel/RightFlywheelSetVoltage",
+        rightFlywheelPidVoltage + rightFlywheelFeedforwardVoltage);
 
     Logger.recordOutput(
         "Shooter/Flywheel/LeftFlywheelVelocity", m_flywheelInputs.linearVelocity[0]);
     Logger.recordOutput(
         "Shooter/Flywheel/RightFlywheelVelocity", m_flywheelInputs.linearVelocity[1]);
     Logger.recordOutput(
-        "Shooter/Flywheel/LeftFlywheelDesiredVelocity",
-        m_leftFlywheelController.getGoal().position);
+        "Shooter/Flywheel/LeftFlywheelDesiredVelocity", m_leftFlywheelController.getSetpoint());
     Logger.recordOutput(
-        "Shooter/Flywheel/RightFlywheelDesiredVelocity",
-        m_rightFlywheelController.getGoal().position);
+        "Shooter/Flywheel/RightFlywheelDesiredVelocity", m_rightFlywheelController.getSetpoint());
   }
 
   public void setPivotAngle(Rotation2d angle) {
@@ -182,8 +183,8 @@ public class Shooter extends SubsystemBase {
 
   /** Set the flywheel velocity in meters per second */
   public void setFlywheelVelocity(double leftVelocity, double rightVelocity) {
-    m_leftFlywheelController.setGoal(leftVelocity);
-    m_rightFlywheelController.setGoal(rightVelocity);
+    m_leftFlywheelController.setSetpoint(leftVelocity);
+    m_rightFlywheelController.setSetpoint(rightVelocity);
   }
 
   public Command setPivotAngleCommand(Rotation2d angle) {

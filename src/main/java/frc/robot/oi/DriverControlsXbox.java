@@ -12,31 +12,31 @@ public class DriverControlsXbox implements DriverControls {
 
   @Override
   public double getDriveForward() {
-    return m_controller.getLeftY();
+    return -m_controller.getLeftY();
   }
 
   @Override
   public double getDriveLeft() {
-    return m_controller.getLeftX();
+    return -m_controller.getLeftX();
   }
 
   @Override
   public double getDriveRotation() {
-    return m_controller.getRightX();
+    return -m_controller.getRightX();
   }
 
   @Override
-  public Trigger testShooter() {
-    return m_controller.button(1);
+  public Trigger revShooter() {
+    return m_controller.leftTrigger();
   }
 
   @Override
-  public Trigger testKicker() {
-    return m_controller.button(2);
+  public Trigger runKicker() {
+    return m_controller.rightBumper();
   }
 
   @Override
-  public Trigger testFeeder() {
-    return m_controller.button(3);
+  public Trigger deployIntake() {
+    return m_controller.rightTrigger();
   }
 }

@@ -44,6 +44,7 @@
 *.wpilog
 advantagekit/logs
 logs
+ctre_sim
 
 # BlueJ files
 *.ctxt
