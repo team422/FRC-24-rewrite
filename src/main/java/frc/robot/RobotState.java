@@ -16,6 +16,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.led.Led;
 import frc.robot.subsystems.led.Led.LedState;
 import frc.robot.subsystems.shooter.Shooter;
+import java.util.HashMap;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotState {
@@ -47,6 +48,8 @@ public class RobotState {
       new Pose3d(
           new Translation3d(-0.269, -0.01, 0.2428),
           new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(201), 0.0));
+
+  private final HashMap<String, Boolean> kPrematchCheckValues;
 
   private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake, Led led) {
     // subsystems
@@ -91,6 +94,13 @@ public class RobotState {
 
     // post to dashboard
     SmartDashboard.putData("Mech2d", m_mechanism);
+
+    kPrematchCheckValues = new HashMap<>();
+    kPrematchCheckValues.put("ShooterPivot", false);
+    kPrematchCheckValues.put("FlywheelsStill", false);
+    kPrematchCheckValues.put("IntakePivot", false);
+    kPrematchCheckValues.put("RollersStill", false);
+    kPrematchCheckValues.put("IndexerMotorsStill", false);
   }
 
   public static RobotState startInstance(
@@ -117,6 +127,17 @@ public class RobotState {
 
     if (kComponentsEnabled) {
       updateComponents();
+    }
+
+    boolean prematchReady = true;
+    for (String key : kPrematchCheckValues.keySet()) {
+      Logger.recordOutput("PreMatchCheck/" + key, kPrematchCheckValues.get(key));
+      prematchReady &= kPrematchCheckValues.get(key);
+    }
+    if (edu.wpi.first.wpilibj.RobotState.isDisabled() && prematchReady) {
+      m_led.setState(LedState.DISABLED_READY);
+    } else {
+      m_led.setState(LedState.DISABLED_NOT_READY);
     }
   }
 
@@ -157,6 +178,13 @@ public class RobotState {
   }
 
   public void onDisable() {
-    m_led.setState(LedState.DISABLED);
+    m_led.setState(LedState.DISABLED_NOT_READY);
+  }
+
+  public void setPrematchCheckValue(String key, boolean value) {
+    if (!kPrematchCheckValues.containsKey(key)) {
+      throw new IllegalArgumentException("Invalid prematch check key: " + key);
+    }
+    kPrematchCheckValues.put(key, value);
   }
 }

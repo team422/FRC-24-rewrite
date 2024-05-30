@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.utils.LoggedTunableNumber;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.shooter.flywheel.FlywheelIO;
 import frc.robot.subsystems.shooter.flywheel.FlywheelInputsAutoLogged;
 import frc.robot.subsystems.shooter.pivot.ShooterPivotIO;
@@ -177,11 +178,12 @@ public class Shooter extends SubsystemBase {
         "Shooter/Flywheel/RightFlywheelDesiredVelocity", m_rightFlywheelController.getSetpoint());
 
     // ready for match
-    Logger.recordOutput(
-        "ReadyForMatch/Shooter",
-        m_pivotController.atGoal()
-            && m_flywheelInputs.linearVelocity[0] < 0.1
-            && m_flywheelInputs.linearVelocity[1] < 0.1);
+    RobotState.getInstance().setPrematchCheckValue("ShooterPivot", m_pivotController.atGoal());
+    RobotState.getInstance()
+        .setPrematchCheckValue(
+            "FlywheelsStill",
+            Math.abs(m_flywheelInputs.linearVelocity[0]) < 0.1
+                && Math.abs(m_flywheelInputs.linearVelocity[1]) < 0.1);
   }
 
   public void setPivotAngle(Rotation2d angle) {

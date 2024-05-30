@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.utils.LoggedTunableNumber;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.RobotState;
 import frc.robot.subsystems.intake.pivot.IntakePivotIO;
 import frc.robot.subsystems.intake.pivot.IntakePivotInputsAutoLogged;
 import frc.robot.subsystems.intake.roller.RollerIO;
@@ -62,8 +63,9 @@ public class Intake extends SubsystemBase {
         "Intake/Pivot/CurrentAngle", Units.radiansToDegrees(m_pivotInputs.curAngle));
 
     // ready for match
-    Logger.recordOutput(
-        "ReadyForMatch/Intake", m_pivotController.atGoal() && m_rollerInputs.curVelocity < 0.1);
+    RobotState.getInstance().setPrematchCheckValue("IntakePivot", m_pivotController.atGoal());
+    RobotState.getInstance()
+        .setPrematchCheckValue("RollersStill", Math.abs(m_rollerInputs.curVelocity) < 0.1);
   }
 
   public void setRollerVoltage(double voltage) {

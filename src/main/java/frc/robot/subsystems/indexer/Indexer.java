@@ -3,6 +3,7 @@ package frc.robot.subsystems.indexer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotState;
 import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
@@ -21,9 +22,11 @@ public class Indexer extends SubsystemBase {
     Logger.processInputs("Indexer", m_inputs);
 
     // ready for match
-    Logger.recordOutput(
-        "ReadyForMatch/Indexer",
-        m_inputs.curFeederVelocity < 0.1 && m_inputs.curKickerVelocity < 0.1);
+    RobotState.getInstance()
+        .setPrematchCheckValue(
+            "IndexerMotorsStill",
+            Math.abs(m_inputs.curFeederVelocity) < 0.1
+                && Math.abs(m_inputs.curKickerVelocity) < 0.1);
   }
 
   public void setKickerVoltage(double voltage) {

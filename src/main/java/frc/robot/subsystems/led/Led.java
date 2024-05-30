@@ -15,7 +15,8 @@ public class Led extends SubsystemBase {
     OFF,
     AUTONOMOUS,
     TELEOP,
-    DISABLED
+    DISABLED_NOT_READY,
+    DISABLED_READY
   }
 
   public Led(int port, int length) {
@@ -50,10 +51,13 @@ public class Led extends SubsystemBase {
         setSolidColor(Color.kBlue);
         break;
       case TELEOP:
-        setSolidColor(Color.kGreen);
+        setSolidColor(Color.kMagenta);
         break;
-      case DISABLED:
+      case DISABLED_NOT_READY:
         setSolidColor(Color.kRed);
+        break;
+      case DISABLED_READY:
+        setSolidColor(Color.kGreen);
         break;
     }
     m_state = state;
