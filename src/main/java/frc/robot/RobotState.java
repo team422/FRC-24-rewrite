@@ -1,8 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -17,6 +21,7 @@ import frc.robot.subsystems.led.Led;
 import frc.robot.subsystems.led.Led.LedState;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.HashMap;
+import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotState {
@@ -49,7 +54,11 @@ public class RobotState {
           new Translation3d(-0.269, -0.01, 0.2428),
           new Rotation3d(Units.degreesToRadians(180), Units.degreesToRadians(201), 0.0));
 
-  private final HashMap<String, Boolean> kPrematchCheckValues;
+  public Pose2d lastVisionUpdate = null;
+
+  private final Map<String, Boolean> kPrematchCheckValues;
+
+  public record VisionObservation(Pose2d visionPose, double timestamp, Matrix<N3, N1> stdDevs) {}
 
   private RobotState(Drive drive, Shooter shooter, Indexer indexer, Intake intake, Led led) {
     // subsystems
@@ -186,5 +195,14 @@ public class RobotState {
       throw new IllegalArgumentException("Invalid prematch check key: " + key);
     }
     kPrematchCheckValues.put(key, value);
+  }
+
+  public void addVisionObservation(VisionObservation observation) {
+    m_drive.addVisionMeasurement(observation.visionPose, observation.timestamp);
+    lastVisionUpdate = observation.visionPose();
+  }
+
+  public Pose2d getOdometryPose() {
+    return m_drive.getPose();
   }
 }
