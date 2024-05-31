@@ -156,6 +156,16 @@ public class RobotState {
     if (edu.wpi.first.wpilibj.RobotState.isDisabled()) {
       updatePrematchCheck();
     }
+
+    if (m_curAction == RobotAction.REV_SHOOTER_LOW
+        || m_curAction == RobotAction.REV_SHOOTER_MID
+        || m_curAction == RobotAction.REV_SHOOTER_HIGH) {
+      if (m_shooter.withinTolerance()) {
+        m_led.setState(LedState.SHOOTER_READY);
+      } else {
+        m_led.setState(LedState.SHOOTER_NOT_READY);
+      }
+    }
   }
 
   public void setCurAction(RobotAction action) {
@@ -168,11 +178,15 @@ public class RobotState {
         m_shooter.setShooter(new ShooterPosition(ShooterConstants.kHomeAngle, 0.0, 0.0));
         m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
         m_intake.setRollerVoltage(0.0);
+        m_indexer.setKickerVoltage(0.0);
+        m_indexer.setFeederVoltage(0.0);
         break;
       case INTAKE:
+        m_shooter.setShooter(new ShooterPosition(ShooterConstants.kHomeAngle, 0.0, 0.0));
         m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
         m_intake.setRollerVoltage(IntakeConstants.kDeployRollerVoltage);
         m_indexer.setFeederVoltage(IndexerConstants.kFeederVoltage);
+        m_indexer.setKickerVoltage(0.0);
         break;
       case REV_SHOOTER_LOW:
         m_shooter.setShooter(
@@ -181,6 +195,8 @@ public class RobotState {
                 ShooterConstants.kLeftFlywheelLowVelocity.get(),
                 ShooterConstants.kRightFlywheelLowVelocity.get()));
         m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+        m_indexer.setFeederVoltage(0.0);
+        m_indexer.setKickerVoltage(0.0);
         break;
       case REV_SHOOTER_MID:
         m_shooter.setShooter(
@@ -189,6 +205,8 @@ public class RobotState {
                 ShooterConstants.kLeftFlywheelMidVelocity.get(),
                 ShooterConstants.kRightFlywheelMidVelocity.get()));
         m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+        m_indexer.setKickerVoltage(0.0);
+        m_indexer.setFeederVoltage(0.0);
         break;
       case REV_SHOOTER_HIGH:
         m_shooter.setShooter(
@@ -197,6 +215,8 @@ public class RobotState {
                 ShooterConstants.kLeftFlywheelHighVelocity.get(),
                 ShooterConstants.kRightFlywheelHighVelocity.get()));
         m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+        m_indexer.setKickerVoltage(0.0);
+        m_indexer.setFeederVoltage(0.0);
         break;
     }
   }
@@ -252,6 +272,7 @@ public class RobotState {
 
   public void onDisable() {
     m_led.setState(LedState.DISABLED_NOT_READY);
+    resetSetpoints();
   }
 
   public void setPrematchCheckValue(String key, boolean value) {
@@ -268,5 +289,13 @@ public class RobotState {
 
   public Pose2d getOdometryPose() {
     return m_drive.getPose();
+  }
+
+  public void resetSetpoints() {
+    m_shooter.setShooter(new ShooterPosition(ShooterConstants.kHomeAngle, 0.0, 0.0));
+    m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
+    m_intake.setRollerVoltage(0.0);
+    m_indexer.setFeederVoltage(0.0);
+    m_indexer.setKickerVoltage(0.0);
   }
 }

@@ -15,6 +15,8 @@ public class Led extends SubsystemBase {
     OFF,
     AUTONOMOUS,
     TELEOP,
+    SHOOTER_NOT_READY,
+    SHOOTER_READY,
     DISABLED_NOT_READY,
     DISABLED_READY
   }
@@ -47,6 +49,9 @@ public class Led extends SubsystemBase {
       case OFF:
         setSolidColor(Color.kBlack);
         break;
+      case SHOOTER_READY:
+        setSolidColor(Color.kYellow);
+        break;
       case AUTONOMOUS:
         setSolidColor(Color.kBlue);
         break;
@@ -56,6 +61,7 @@ public class Led extends SubsystemBase {
       case DISABLED_NOT_READY:
         setSolidColor(Color.kRed);
         break;
+      case SHOOTER_NOT_READY:
       case DISABLED_READY:
         setSolidColor(Color.kGreen);
         break;

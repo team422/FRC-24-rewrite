@@ -1,6 +1,6 @@
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,9 +22,9 @@ public class Intake extends SubsystemBase {
   public final RollerInputsAutoLogged m_rollerInputs;
   public final IntakePivotInputsAutoLogged m_pivotInputs;
 
-  private ProfiledPIDController m_pivotController;
+  private PIDController m_pivotController;
 
-  public Intake(RollerIO io, IntakePivotIO pivotIO, ProfiledPIDController pivotController) {
+  public Intake(RollerIO io, IntakePivotIO pivotIO, PIDController pivotController) {
     m_rollerIO = io;
     m_pivotIO = pivotIO;
     m_pivotController = pivotController;
@@ -57,13 +57,12 @@ public class Intake extends SubsystemBase {
 
     Logger.recordOutput("Intake/Pivot/PIDVoltage", pivotPidVoltage);
     Logger.recordOutput(
-        "Intake/Pivot/DesiredAngle",
-        Units.radiansToDegrees(m_pivotController.getSetpoint().position));
+        "Intake/Pivot/DesiredAngle", Units.radiansToDegrees(m_pivotController.getSetpoint()));
     Logger.recordOutput(
         "Intake/Pivot/CurrentAngle", Units.radiansToDegrees(m_pivotInputs.curAngle));
 
     // ready for match
-    RobotState.getInstance().setPrematchCheckValue("IntakePivot", m_pivotController.atGoal());
+    RobotState.getInstance().setPrematchCheckValue("IntakePivot", m_pivotController.atSetpoint());
     RobotState.getInstance()
         .setPrematchCheckValue("RollersStill", Math.abs(m_rollerInputs.curVelocity) < 0.1);
   }
@@ -73,7 +72,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void setPivotAngle(Rotation2d angle) {
-    m_pivotController.setGoal(angle.getRadians());
+    m_pivotController.setSetpoint(angle.getRadians());
   }
 
   public Command runRollerCommand(double voltage) {
@@ -81,7 +80,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Command setPivotAngleCommand(Rotation2d angle) {
-    return Commands.runOnce(() -> m_pivotController.setGoal(angle.getRadians()));
+    return Commands.runOnce(() -> m_pivotController.setSetpoint(angle.getRadians()));
   }
 
   public Rotation2d getPivotAngle() {

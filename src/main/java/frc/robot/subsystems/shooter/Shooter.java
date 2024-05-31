@@ -207,4 +207,10 @@ public class Shooter extends SubsystemBase {
   public Rotation2d getPivotAngle() {
     return Rotation2d.fromRadians(m_pivotInputs.curAngle);
   }
+
+  public boolean withinTolerance() {
+    return m_pivotController.atGoal()
+        && m_leftFlywheelController.atSetpoint()
+        && m_rightFlywheelController.atSetpoint();
+  }
 }

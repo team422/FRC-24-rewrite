@@ -15,7 +15,6 @@ package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -72,25 +71,25 @@ public class ModuleIOTalonFX implements ModuleIO {
         driveTalon = new TalonFX(10, "Drivetrain");
         turnTalon = new TalonFX(11, "Drivetrain");
         cancoder = new CANcoder(12, "Drivetrain");
-        absoluteEncoderOffset = new Rotation2d(2.827); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(0.0); // MUST BE CALIBRATED
         break;
       case 1:
         driveTalon = new TalonFX(7, "Drivetrain");
         turnTalon = new TalonFX(8, "Drivetrain");
         cancoder = new CANcoder(9, "Drivetrain");
-        absoluteEncoderOffset = new Rotation2d(-2.945); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(0.0); // MUST BE CALIBRATED
         break;
       case 2:
         driveTalon = new TalonFX(4, "Drivetrain");
         turnTalon = new TalonFX(5, "Drivetrain");
         cancoder = new CANcoder(6, "Drivetrain");
-        absoluteEncoderOffset = new Rotation2d(0.175); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(0.0); // MUST BE CALIBRATED
         break;
       case 3:
         driveTalon = new TalonFX(1, "Drivetrain");
         turnTalon = new TalonFX(2, "Drivetrain");
         cancoder = new CANcoder(3, "Drivetrain");
-        absoluteEncoderOffset = new Rotation2d(1.226); // MUST BE CALIBRATED
+        absoluteEncoderOffset = new Rotation2d(0.0); // MUST BE CALIBRATED
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -108,7 +107,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     turnTalon.getConfigurator().apply(turnConfig);
     setTurnBrakeMode(true);
 
-    cancoder.getConfigurator().apply(new CANcoderConfiguration());
+    // cancoder.getConfigurator().apply(new CANcoderConfiguration());
 
     timestampQueue = PhoenixOdometryThread.getInstance().makeTimestampQueue();
 

@@ -133,10 +133,9 @@ public class RobotContainer {
       m_led = new Led(Ports.kLed, 20);
     }
 
-    m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
-    m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
-
     m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer, m_intake, m_led);
+
+    m_robotState.resetSetpoints();
   }
 
   private void configureControllers() {
@@ -146,6 +145,7 @@ public class RobotContainer {
     } else {
       m_driverControls = new DriverControlsXbox(1);
     }
+    m_driverControls = new DriverControlsXbox(1); // TODO: remove after testing
   }
 
   private void configureButtonBindings() {

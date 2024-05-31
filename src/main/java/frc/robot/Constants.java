@@ -111,16 +111,16 @@ public final class Constants {
         new LoggedTunableNumber("Shooter Pivot Low Angle", 20);
 
     public static final LoggedTunableNumber kLeftFlywheelMidVelocity =
-        new LoggedTunableNumber("Shooter Left Flywheel Mid Velocity", 13.0);
+        new LoggedTunableNumber("Shooter Left Flywheel Mid Velocity", 9.0);
     public static final LoggedTunableNumber kRightFlywheelMidVelocity =
-        new LoggedTunableNumber("Shooter Right Flywheel Mid Velocity", 15.0);
+        new LoggedTunableNumber("Shooter Right Flywheel Mid Velocity", 11.0);
     public static final LoggedTunableNumber kPivotMidAngle =
         new LoggedTunableNumber("Shooter Pivot Mid Angle", 35);
 
     public static final LoggedTunableNumber kLeftFlywheelHighVelocity =
-        new LoggedTunableNumber("Shooter Left Flywheel High Velocity", 19.0);
+        new LoggedTunableNumber("Shooter Left Flywheel High Velocity", 9.0);
     public static final LoggedTunableNumber kRightFlywheelHighVelocity =
-        new LoggedTunableNumber("Shooter Right Flywheel High Velocity", 21.0);
+        new LoggedTunableNumber("Shooter Right Flywheel High Velocity", 11.0);
     public static final LoggedTunableNumber kPivotHighAngle =
         new LoggedTunableNumber("Shooter Pivot High Angle", 55);
   }
@@ -143,15 +143,9 @@ public final class Constants {
     public static final LoggedTunableNumber kPivotI =
         new LoggedTunableNumber("Intake Pivot I", 0.0);
     public static final LoggedTunableNumber kPivotD =
-        new LoggedTunableNumber("Intake Pivot D", 0.0);
-    public static final double kPivotVelocity = 25.0;
-    public static final double kPivotAcceleration = 30.0;
-    public static final ProfiledPIDController kPivotController =
-        new ProfiledPIDController(
-            kPivotP.get(),
-            kPivotI.get(),
-            kPivotD.get(),
-            new Constraints(kPivotVelocity, kPivotAcceleration));
+        new LoggedTunableNumber("Intake Pivot D", 0.04);
+    public static final PIDController kPivotController =
+        new PIDController(kPivotP.get(), kPivotI.get(), kPivotD.get());
   }
 
   public static class IndexerConstants {
