@@ -101,6 +101,28 @@ public final class Constants {
         new LoggedTunableNumber("Shooter Left Flywheel kV", 0.27);
     public static final SimpleMotorFeedforward kLeftFlywheelFeedforward =
         new SimpleMotorFeedforward(kLeftFlywheelKs.get(), kLeftFlywheelKv.get());
+
+    // setpoints for ImmerseCon (firing into crowd)
+    public static final LoggedTunableNumber kLeftFlywheelLowVelocity =
+        new LoggedTunableNumber("Shooter Left Flywheel Low Velocity", 9.0);
+    public static final LoggedTunableNumber kRightFlywheelLowVelocity =
+        new LoggedTunableNumber("Shooter Right Flywheel Low Velocity", 11.0);
+    public static final LoggedTunableNumber kPivotLowAngle =
+        new LoggedTunableNumber("Shooter Pivot Low Angle", 20);
+
+    public static final LoggedTunableNumber kLeftFlywheelMidVelocity =
+        new LoggedTunableNumber("Shooter Left Flywheel Mid Velocity", 13.0);
+    public static final LoggedTunableNumber kRightFlywheelMidVelocity =
+        new LoggedTunableNumber("Shooter Right Flywheel Mid Velocity", 15.0);
+    public static final LoggedTunableNumber kPivotMidAngle =
+        new LoggedTunableNumber("Shooter Pivot Mid Angle", 35);
+
+    public static final LoggedTunableNumber kLeftFlywheelHighVelocity =
+        new LoggedTunableNumber("Shooter Left Flywheel High Velocity", 19.0);
+    public static final LoggedTunableNumber kRightFlywheelHighVelocity =
+        new LoggedTunableNumber("Shooter Right Flywheel High Velocity", 21.0);
+    public static final LoggedTunableNumber kPivotHighAngle =
+        new LoggedTunableNumber("Shooter Pivot High Angle", 55);
   }
 
   public static final class IntakeConstants {

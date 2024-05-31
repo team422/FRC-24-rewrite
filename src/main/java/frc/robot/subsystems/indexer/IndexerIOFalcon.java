@@ -2,6 +2,7 @@ package frc.robot.subsystems.indexer;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -59,11 +60,11 @@ public class IndexerIOFalcon implements IndexerIO {
 
   @Override
   public void setKickerVoltage(double voltage) {
-    m_kickerMotor.setVoltage(voltage);
+    m_kickerMotor.setControl(new VoltageOut(voltage));
   }
 
   @Override
   public void setFeederVoltage(double voltage) {
-    m_feederMotor.setVoltage(voltage);
+    m_feederMotor.setControl(new VoltageOut(voltage));
   }
 }

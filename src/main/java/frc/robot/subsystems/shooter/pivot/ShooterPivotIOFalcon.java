@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter.pivot;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -66,7 +67,7 @@ public class ShooterPivotIOFalcon implements ShooterPivotIO {
 
   @Override
   public void setVoltage(double voltage) {
-    m_leader.setVoltage(voltage);
+    m_leader.setControl(new VoltageOut(voltage));
   }
 
   @Override

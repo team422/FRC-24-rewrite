@@ -78,6 +78,6 @@ public class FlywheelIOKraken implements FlywheelIO {
   @Override
   public void setVoltage(double leftVoltage, double rightVoltage) {
     m_leftMotor.setControl(new VoltageOut(leftVoltage));
-    m_rightMotor.setVoltage(rightVoltage);
+    m_rightMotor.setControl(new VoltageOut(rightVoltage));
   }
 }

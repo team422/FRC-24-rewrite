@@ -19,18 +19,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
   /** Represents the desired state of the shooter, including flywheel and pivot measurements */
-  public static class ShooterPosition {
-    public Rotation2d pivotAngle;
-    public double leftFlywheelVelocity;
-    public double rightFlywheelVelocity;
-
-    public ShooterPosition(
-        Rotation2d pivotAngle, double leftFlywheelVelocity, double rightFlywheelVelocity) {
-      this.pivotAngle = pivotAngle;
-      this.leftFlywheelVelocity = leftFlywheelVelocity;
-      this.rightFlywheelVelocity = rightFlywheelVelocity;
-    }
-  }
+  public static record ShooterPosition(
+      Rotation2d pivotAngle, double leftFlywheelVelocity, double rightFlywheelVelocity) {}
 
   private ShooterPivotIO m_pivotIO;
   private FlywheelIO m_flywheelIO;
@@ -205,13 +195,13 @@ public class Shooter extends SubsystemBase {
     return Commands.runOnce(() -> setFlywheelVelocity(leftVelocity, rightVelocity));
   }
 
-  public void setShooter(ShooterPosition state) {
-    setPivotAngle(state.pivotAngle);
-    setFlywheelVelocity(state.leftFlywheelVelocity, state.rightFlywheelVelocity);
+  public void setShooter(ShooterPosition position) {
+    setPivotAngle(position.pivotAngle());
+    setFlywheelVelocity(position.leftFlywheelVelocity(), position.rightFlywheelVelocity());
   }
 
-  public Command setShooterCommand(ShooterPosition state) {
-    return Commands.runOnce(() -> setShooter(state));
+  public Command setShooterCommand(ShooterPosition position) {
+    return Commands.runOnce(() -> setShooter(position));
   }
 
   public Rotation2d getPivotAngle() {

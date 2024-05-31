@@ -13,13 +13,13 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.Ports;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.RobotState.RobotAction;
 import frc.robot.commands.DriveCommands;
 import frc.robot.oi.DriverControls;
 import frc.robot.oi.DriverControlsPS5;
@@ -157,21 +157,42 @@ public class RobotContainer {
             m_driverControls::getDriveRotation));
 
     m_driverControls
-        .revShooter()
+        .revShooterLow()
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_shooter.setFlywheelVelocity(17.0, 20.0);
-                  m_shooter.setPivotAngle(Rotation2d.fromDegrees(50));
-                  // deploy intake so shooter pivot doesn't run into it
-                  m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+                  m_robotState.setCurAction(RobotAction.REV_SHOOTER_LOW);
                 }))
         .onFalse(
             Commands.runOnce(
                 () -> {
-                  m_shooter.setFlywheelVelocity(0.0, 0.0);
-                  m_shooter.setPivotAngle(ShooterConstants.kHomeAngle);
-                  m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
+                  m_robotState.setCurAction(RobotAction.STOW);
+                }));
+
+    m_driverControls
+        .revShooterMid()
+        .onTrue(
+            Commands.runOnce(
+                () -> {
+                  m_robotState.setCurAction(RobotAction.REV_SHOOTER_MID);
+                }))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  m_robotState.setCurAction(RobotAction.STOW);
+                }));
+
+    m_driverControls
+        .revShooterHigh()
+        .onTrue(
+            Commands.runOnce(
+                () -> {
+                  m_robotState.setCurAction(RobotAction.REV_SHOOTER_HIGH);
+                }))
+        .onFalse(
+            Commands.runOnce(
+                () -> {
+                  m_robotState.setCurAction(RobotAction.STOW);
                 }));
 
     m_driverControls
@@ -184,16 +205,12 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                 () -> {
-                  m_indexer.setFeederVoltage(IndexerConstants.kFeederVoltage);
-                  m_intake.setRollerVoltage(IntakeConstants.kDeployRollerVoltage);
-                  m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+                  m_robotState.setCurAction(RobotAction.INTAKE);
                 }))
         .onFalse(
             Commands.runOnce(
                 () -> {
-                  m_indexer.setFeederVoltage(0.0);
-                  m_intake.setRollerVoltage(0.0);
-                  m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
+                  m_robotState.setCurAction(RobotAction.STOW);
                 }));
   }
 

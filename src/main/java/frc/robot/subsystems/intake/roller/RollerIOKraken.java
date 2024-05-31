@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake.roller;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.util.Units;
 
@@ -29,6 +30,6 @@ public class RollerIOKraken implements RollerIO {
 
   @Override
   public void setVoltage(double voltage) {
-    m_motor.setVoltage(voltage);
+    m_motor.setControl(new VoltageOut(voltage));
   }
 }

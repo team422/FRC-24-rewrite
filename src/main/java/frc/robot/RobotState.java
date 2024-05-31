@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
@@ -14,17 +15,31 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.indexer.Indexer;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.led.Led;
 import frc.robot.subsystems.led.Led.LedState;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.Shooter.ShooterPosition;
 import java.util.HashMap;
 import java.util.Map;
 import org.littletonrobotics.junction.Logger;
 
 public class RobotState {
+
+  public static enum RobotAction {
+    STOW,
+    INTAKE,
+    REV_SHOOTER_LOW,
+    REV_SHOOTER_MID,
+    REV_SHOOTER_HIGH
+  }
+
+  private RobotAction m_curAction = RobotAction.STOW;
 
   private static RobotState instance = null;
 
@@ -138,6 +153,55 @@ public class RobotState {
       updateComponents();
     }
 
+    if (edu.wpi.first.wpilibj.RobotState.isDisabled()) {
+      updatePrematchCheck();
+    }
+  }
+
+  public void setCurAction(RobotAction action) {
+    if (m_curAction == action) {
+      return;
+    }
+    m_curAction = action;
+    switch (m_curAction) {
+      case STOW:
+        m_shooter.setShooter(new ShooterPosition(ShooterConstants.kHomeAngle, 0.0, 0.0));
+        m_intake.setPivotAngle(IntakeConstants.kHomeAngle);
+        m_intake.setRollerVoltage(0.0);
+        break;
+      case INTAKE:
+        m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+        m_intake.setRollerVoltage(IntakeConstants.kDeployRollerVoltage);
+        m_indexer.setFeederVoltage(IndexerConstants.kFeederVoltage);
+        break;
+      case REV_SHOOTER_LOW:
+        m_shooter.setShooter(
+            new ShooterPosition(
+                Rotation2d.fromDegrees(ShooterConstants.kPivotLowAngle.get()),
+                ShooterConstants.kLeftFlywheelLowVelocity.get(),
+                ShooterConstants.kRightFlywheelLowVelocity.get()));
+        m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+        break;
+      case REV_SHOOTER_MID:
+        m_shooter.setShooter(
+            new ShooterPosition(
+                Rotation2d.fromDegrees(ShooterConstants.kPivotMidAngle.get()),
+                ShooterConstants.kLeftFlywheelMidVelocity.get(),
+                ShooterConstants.kRightFlywheelMidVelocity.get()));
+        m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+        break;
+      case REV_SHOOTER_HIGH:
+        m_shooter.setShooter(
+            new ShooterPosition(
+                Rotation2d.fromDegrees(ShooterConstants.kPivotHighAngle.get()),
+                ShooterConstants.kLeftFlywheelHighVelocity.get(),
+                ShooterConstants.kRightFlywheelHighVelocity.get()));
+        m_intake.setPivotAngle(IntakeConstants.kDeployedAngle);
+        break;
+    }
+  }
+
+  public void updatePrematchCheck() {
     boolean prematchReady = true;
     for (String key : kPrematchCheckValues.keySet()) {
       Logger.recordOutput("PreMatchCheck/" + key, kPrematchCheckValues.get(key));

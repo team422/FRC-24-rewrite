@@ -9,7 +9,11 @@ public interface DriverControls {
 
   public double getDriveRotation();
 
-  public Trigger revShooter();
+  public Trigger revShooterLow();
+
+  public Trigger revShooterMid();
+
+  public Trigger revShooterHigh();
 
   public Trigger runKicker();
 

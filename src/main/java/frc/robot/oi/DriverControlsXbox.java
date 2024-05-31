@@ -26,8 +26,18 @@ public class DriverControlsXbox implements DriverControls {
   }
 
   @Override
-  public Trigger revShooter() {
+  public Trigger revShooterLow() {
+    return m_controller.b();
+  }
+
+  @Override
+  public Trigger revShooterMid() {
     return m_controller.leftTrigger();
+  }
+
+  @Override
+  public Trigger revShooterHigh() {
+    return m_controller.x();
   }
 
   @Override

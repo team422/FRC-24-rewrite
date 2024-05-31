@@ -26,8 +26,18 @@ public class DriverControlsPS5 implements DriverControls {
   }
 
   @Override
-  public Trigger revShooter() {
+  public Trigger revShooterLow() {
+    return m_controller.circle();
+  }
+
+  @Override
+  public Trigger revShooterMid() {
     return m_controller.L2();
+  }
+
+  @Override
+  public Trigger revShooterHigh() {
+    return m_controller.square();
   }
 
   @Override
