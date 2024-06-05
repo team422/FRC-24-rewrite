@@ -133,7 +133,7 @@ public class RobotContainer {
       m_led = new Led(Ports.kLed, 20);
     }
 
-    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer, m_intake, m_led);
+    m_robotState = RobotState.startInstance(m_drive, m_shooter, m_indexer, m_intake, m_led); 
 
     m_robotState.resetSetpoints();
   }
@@ -145,7 +145,6 @@ public class RobotContainer {
     } else {
       m_driverControls = new DriverControlsXbox(1);
     }
-    m_driverControls = new DriverControlsXbox(1); // TODO: remove after testing
   }
 
   private void configureButtonBindings() {
